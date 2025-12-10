@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetStream - Stream Movies & TV Shows</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="logo-loading">
+                <h1>NETSTREAM</h1>
+                <div class="liquid-loader">
+                    <div class="liquid-drop"></div>
+                    <div class="liquid-drop"></div>
+                    <div class="liquid-drop"></div>
+                </div>
+            </div>
+            <p>Loading amazing content...</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" class="logo-link">
+                    <h1><span class="logo-highlight">NET</span>STREAM</h1>
+                </a>
+            </div>
+            
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Home</a>
+                <a href="movies.html" class="nav-link"><i class="fas fa-film"></i> Movies</a>
+                <a href="tvshows.html" class="nav-link"><i class="fas fa-tv"></i> TV Shows</a>
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search movies, TV shows, anime...">
+                        <button id="searchBtn"><i class="fas fa-search"></i></button>
+                        <div class="search-results" id="searchResults"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="btn-notification" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">3</span>
+                </button>
+                <div class="user-profile">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="User" class="user-avatar">
+                    <div class="user-dropdown">
+                        <a href="#"><i class="fas fa-user"></i> Profile</a>
+                        <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="#"><i class="fas fa-history"></i> Watch History</a>
+                        <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-slider" id="heroSlider">
+            <!-- Hero slides will be dynamically loaded here -->
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-info">
+                <h1 class="hero-title" id="heroTitle">Loading...</h1>
+                <div class="hero-meta">
+                    <span class="rating"><i class="fas fa-star"></i> <span id="heroRating">0.0</span></span>
+                    <span class="year" id="heroYear">2023</span>
+                    <span class="duration" id="heroDuration">120 min</span>
+                </div>
+                <p class="hero-description" id="heroDescription">Description loading...</p>
+                <div class="hero-buttons">
+                    <button class="btn-watch" id="playHeroBtn">
+                        <i class="fas fa-play"></i> Watch Now
+                    </button>
+                    <button class="btn-trailer" id="trailerBtn">
+                        <i class="fas fa-play-circle"></i> Play Trailer
+                    </button>
+                    <button class="btn-info" id="moreInfoBtn">
+                        <i class="fas fa-info-circle"></i> More Info
+                    </button>
+                </div>
+                <div class="hero-genres" id="heroGenres">
+                    <span class="genre-tag">Action</span>
+                    <span class="genre-tag">Adventure</span>
+                    <span class="genre-tag">Sci-Fi</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Hero Trailer Modal -->
+        <div class="trailer-modal" id="trailerModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Trailer Preview</h3>
+                    <button class="close-modal" id="closeTrailerBtn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="trailer-player" id="trailerPlayer">
+                        <p>Loading trailer...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top 10 Trending Today -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-fire"></i> Top 10 Trending Today</h2>
+                <a href="movies.html?filter=trending" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="trending-slider" id="trendingSlider">
+                <!-- Trending items will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- Top Rated Movies -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-crown"></i> Top Rated Movies</h2>
+                <a href="movies.html?filter=top-rated" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="movies-grid" id="topRatedMovies">
+                <!-- Top rated movies will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- Recent Indian OTT Releases -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-flag"></i> Recent Indian OTT Releases</h2>
+                <a href="movies.html?filter=indian" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="ott-slider" id="ottSlider">
+                <!-- Indian OTT releases will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- You May Like Section -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-thumbs-up"></i> Recommended For You</h2>
+            </div>
+            <div class="recommended-grid" id="recommendedGrid">
+                <!-- Recommended movies will be dynamically loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <h2><span class="logo-highlight">NET</span>STREAM</h2>
+                <p>Unlimited entertainment, anytime, anywhere.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>NetStream</h3>
+                    <a href="#">About Us</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Investor Relations</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Help Center</h3>
+                    <a href="#">Account</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Cookie Preferences</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Browse</h3>
+                    <a href="movies.html">Movies</a>
+                    <a href="tvshows.html">TV Shows</a>
+                    <a href="#">New Releases</a>
+                    <a href="#">Anime</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2023 NetStream. All rights reserved. This is a demo project for educational purposes.</p>
+            <p>Powered by TMDB API</p>
+        </div>
+    </footer>
+
+    <!-- Movie Detail Modal -->
+    <div class="movie-modal" id="movieModal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Movie Title</h3>
+                <button class="close-modal" id="closeMovieBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="movie-detail" id="movieDetail">
+                    <!-- Movie details will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Modal -->
+    <div class="player-modal" id="playerModal">
+        <div class="modal-content full-modal">
+            <div class="modal-header">
+                <h3 id="playerTitle">Playing: Movie Title</h3>
+                <button class="close-modal" id="closePlayerBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="player-container" id="playerContainer">
+                    <!-- Player will be dynamically loaded here -->
+                </div>
+                <div class="player-info">
+                    <div class="player-details">
+                        <h4 id="playingTitle">Movie Title</h4>
+                        <div class="player-meta">
+                            <span class="rating"><i class="fas fa-star"></i> <span id="playerRating">0.0</span></span>
+                            <span class="year" id="playerYear">2023</span>
+                            <span class="duration" id="playerDuration">120 min</span>
+                        </div>
+                        <p id="playerDescription">Movie description...</p>
+                    </div>
+                    <div class="player-cast" id="playerCast">
+                        <!-- Cast will be dynamically loaded here -->
+                    </div>
+                    <div class="similar-movies" id="similarMovies">
+                        <h5>You May Also Like</h5>
+                        <!-- Similar movies will be dynamically loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+// Scripts
+<script>
+    // API Configuration
+    const TMDB_API_KEY = '29133efc18d9b0f0d716be947fc23778';
+    const YOUTUBE_API_KEY = 'AIzaSyBafZ-gjeJqEbxMEbemlP_Ftih4eXjBNXc';
+    const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+    const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
+    
+    // Store current movie/TV data
+    let currentHeroItem = null;
+    let trendingMovies = [];
+    let topRatedMovies = [];
+    let indianMovies = [];
+    let recommendedMovies = [];
+    
+    // Track current players
+    let currentYouTubePlayer = null;
+    let currentVidkingPlayer = null;
+    
+    // DOM Elements
+    const loadingScreen = document.getElementById('loadingScreen');
+    const heroSlider = document.getElementById('heroSlider');
+    const heroTitle = document.getElementById('heroTitle');
+    const heroRating = document.getElementById('heroRating');
+    const heroYear = document.getElementById('heroYear');
+    const heroDuration = document.getElementById('heroDuration');
+    const heroDescription = document.getElementById('heroDescription');
+    const heroGenres = document.getElementById('heroGenres');
+    const trendingSlider = document.getElementById('trendingSlider');
+    const topRatedMoviesGrid = document.getElementById('topRatedMovies');
+    const ottSlider = document.getElementById('ottSlider');
+    const recommendedGrid = document.getElementById('recommendedGrid');
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    const searchBtn = document.getElementById('searchBtn');
+    const movieModal = document.getElementById('movieModal');
+    const playerModal = document.getElementById('playerModal');
+    const trailerModal = document.getElementById('trailerModal');
+    const closeMovieBtn = document.getElementById('closeMovieBtn');
+    const closePlayerBtn = document.getElementById('closePlayerBtn');
+    const closeTrailerBtn = document.getElementById('closeTrailerBtn');
+    
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+        // Hide loading screen after 1.5 seconds
+        setTimeout(() => {
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+        }, 1500);
+        
+        // Load initial data
+        loadHeroSlider();
+        loadTrendingMovies();
+        loadTopRatedMovies();
+        loadIndianMovies();
+        loadRecommendedMovies();
+        
+        // Setup event listeners
+        setupEventListeners();
+    });
+    
+    // Setup all event listeners
+    function setupEventListeners() {
+        // Search functionality
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            } else if (searchInput.value.length > 2) {
+                searchSuggestions(searchInput.value);
+            } else {
+                searchResults.innerHTML = '';
+                searchResults.style.display = 'none';
+            }
+        });
+        
+        // Close search results when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchBox.contains(e.target)) {
+                searchResults.style.display = 'none';
+            }
+        });
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === movieModal) {
+                closeModal(movieModal);
+            }
+            if (e.target === playerModal) {
+                closeModal(playerModal);
+                stopAllMediaPlayers();
+            }
+            if (e.target === trailerModal) {
+                closeModal(trailerModal);
+                stopAllMediaPlayers();
+            }
+        });
+        
+        // Mobile menu toggle
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+        
+        // Navigation active state
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Close mobile menu if open
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+        
+        // Close modal buttons
+        closeMovieBtn.addEventListener('click', function() {
+            closeModal(movieModal);
+        });
+        
+        closePlayerBtn.addEventListener('click', function() {
+            closeModal(playerModal);
+            stopAllMediaPlayers();
+        });
+        
+        closeTrailerBtn.addEventListener('click', function() {
+            closeModal(trailerModal);
+            stopAllMediaPlayers();
+        });
+        
+        // Escape key to close modals
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (playerModal.classList.contains('active')) {
+                    closeModal(playerModal);
+                    stopAllMediaPlayers();
+                } else if (trailerModal.classList.contains('active')) {
+                    closeModal(trailerModal);
+                    stopAllMediaPlayers();
+                } else if (movieModal.classList.contains('active')) {
+                    closeModal(movieModal);
+                }
+            }
+        });
+    }
+    
+    // Load hero slider with trending movies
+    async function loadHeroSlider() {
+        try {
+            const response = await fetch(`${TMDB_BASE_URL}/trending/movie/week?api_key=${TMDB_API_KEY}`);
+            const data = await response.json();
+            
+            // Get top 5 trending movies for hero
+            const heroMovies = data.results.slice(0, 5);
+            
+            // Clear hero slider
+            heroSlider.innerHTML = '';
+            
+            // Add slides to hero
+            heroMovies.forEach((movie, index) => {
+                const slide = document.createElement('div');
+                slide.className = `hero-slide ${index === 0 ? 'active' : ''}`;
+                slide.style.backgroundImage = `linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)), url('${TMDB_IMAGE_BASE}/original${movie.backdrop_path}')`;
+                slide.dataset.movieId = movie.id;
+                
+                slide.addEventListener('click', function() {
+                    showMovieDetails(movie.id, 'movie');
+                });
+                
+                heroSlider.appendChild(slide);
+            });
+            
+            // Set first movie as hero content
+            if (heroMovies.length > 0) {
+                updateHeroContent(heroMovies[0]);
+                currentHeroItem = heroMovies[0];
+                
+                // Auto slide hero every 8 seconds
+                setInterval(() => {
+                    slideHero();
+                }, 8000);
+            }
+            
+        } catch (error) {
+            console.error('Error loading hero slider:', error);
+            heroSlider.innerHTML = '<div class="hero-slide active" style="background-image: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)), url(\'https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1925&q=80\')"></div>';
+        }
+    }
+    
+    // Update hero content with movie data
+    function updateHeroContent(movie) {
+        heroTitle.textContent = movie.title || movie.name;
+        heroRating.textContent = movie.vote_average.toFixed(1);
+        heroYear.textContent = movie.release_date ? movie.release_date.substring(0, 4) : 'N/A';
+        heroDuration.textContent = '120 min'; // Default - would need additional API call for runtime
+        heroDescription.textContent = movie.overview.substring(0, 150) + '...';
+        
+        // Clear genres
+        heroGenres.innerHTML = '';
+        
+        // Add genre tags (mock data - would need genre API call)
+        const mockGenres = ['Action', 'Adventure', 'Sci-Fi'];
+        mockGenres.forEach(genre => {
+            const genreTag = document.createElement('span');
+            genreTag.className = 'genre-tag';
+            genreTag.textContent = genre;
+            heroGenres.appendChild(genreTag);
+        });
+        
+        // Set play button event
+        document.getElementById('playHeroBtn').onclick = function() {
+            playMedia(movie.id, 'movie', movie.title || movie.name);
+        };
+        
+        // Set trailer button event
+        document.getElementById('trailerBtn').onclick = function() {
+            showTrailer(movie.id, 'movie');
+        };
+        
+        // Set more info button event
+        document.getElementById('moreInfoBtn').onclick = function() {
+            showMovieDetails(movie.id, 'movie');
+        };
+    }
+    
+    // Slide hero to next slide
+    function slideHero() {
+        const slides = document.querySelectorAll('.hero-slide');
+        const activeSlide = document.querySelector('.hero-slide.active');
+        let nextSlide = activeSlide.nextElementSibling;
+        
+        if (!nextSlide) {
+            nextSlide = slides[0];
+        }
+        
+        activeSlide.classList.remove('active');
+        nextSlide.classList.add('active');
+        
+        // Update hero content with next movie data
+        const movieId = parseInt(nextSlide.dataset.movieId);
+        const movie = trendingMovies.find(m => m.id === movieId);
+        if (movie) {
+            updateHeroContent(movie);
+            currentHeroItem = movie;
+        }
+    }
+    
+    // Load trending movies for the top 10 section
+    async function loadTrendingMovies() {
+        try {
+            const response = await fetch(`${TMDB_BASE_URL}/trending/movie/day?api_key=${TMDB_API_KEY}`);
+            const data = await response.json();
+            
+            // Store trending movies
+            trendingMovies = data.results.slice(0, 10);
+            
+            // Clear trending slider
+            trendingSlider.innerHTML = '';
+            
+            // Add trending movies to slider
+            trendingMovies.forEach((movie, index) => {
+                const movieCard = createMovieCard(movie, index + 1);
+                trendingSlider.appendChild(movieCard);
+            });
+            
+        } catch (error) {
+            console.error('Error loading trending movies:', error);
+            trendingSlider.innerHTML = '<p class="error-msg">Failed to load trending movies. Please try again later.</p>';
+        }
+    }
+    
+    // Load top rated movies
+    async function loadTopRatedMovies() {
+        try {
+            const response = await fetch(`${TMDB_BASE_URL}/movie/top_rated?api_key=${TMDB_API_KEY}`);
+            const data = await response.json();
+            
+            // Store top rated movies
+            topRatedMovies = data.results.slice(0, 12);
+            
+            // Clear top rated grid
+            topRatedMoviesGrid.innerHTML = '';
+            
+            // Add top rated movies to grid
+            topRatedMovies.forEach(movie => {
+                const movieCard = createMovieCard(movie);
+                topRatedMoviesGrid.appendChild(movieCard);
+            });
+            
+        } catch (error) {
+            console.error('Error loading top rated movies:', error);
+            topRatedMoviesGrid.innerHTML = '<p class="error-msg">Failed to load top rated movies. Please try again later.</p>';
+        }
+    }
+    
+    // Load Indian OTT releases
+    async function loadIndianMovies() {
+        try {
+            // Search for Indian movies
+            const response = await fetch(`${TMDB_BASE_URL}/discover/movie?api_key=${TMDB_API_KEY}&with_original_language=hi&sort_by=release_date.desc&page=1`);
+            const data = await response.json();
+            
+            // Store Indian movies
+            indianMovies = data.results.slice(0, 10);
+            
+            // Clear OTT slider
+            ottSlider.innerHTML = '';
+            
+            // Add Indian movies to slider
+            indianMovies.forEach(movie => {
+                const movieCard = createMovieCard(movie);
+                ottSlider.appendChild(movieCard);
+            });
+            
+        } catch (error) {
+            console.error('Error loading Indian movies:', error);
+            ottSlider.innerHTML = '<p class="error-msg">Failed to load Indian OTT releases. Please try again later.</p>';
+        }
+    }
+    
+    // Load recommended movies
+    async function loadRecommendedMovies() {
+        try {
+            // Get popular movies as recommendations
+            const response = await fetch(`${TMDB_BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}&page=2`);
+            const data = await response.json();
+            
+            // Store recommended movies
+            recommendedMovies = data.results.slice(0, 6);
+            
+            // Clear recommended grid
+            recommendedGrid.innerHTML = '';
+            
+            // Add recommended movies to grid
+            recommendedMovies.forEach(movie => {
+                const movieCard = createMovieCard(movie);
+                recommendedGrid.appendChild(movieCard);
+            });
+            
+        } catch (error) {
+            console.error('Error loading recommended movies:', error);
+            recommendedGrid.innerHTML = '<p class="error-msg">Failed to load recommendations. Please try again later.</p>';
+        }
+    }
+    
+    // Create movie card element
+    function createMovieCard(movie, rank = null) {
+        const card = document.createElement('div');
+        card.className = 'movie-card';
+        card.dataset.id = movie.id;
+        card.dataset.type = 'movie';
+        
+        // Add rank badge if provided
+        let rankBadge = '';
+        if (rank) {
+            rankBadge = `<div class="rank-badge">${rank}</div>`;
+        }
+        
+        card.innerHTML = `
+            ${rankBadge}
+            <div class="movie-poster">
+                <img src="${movie.poster_path ? `${TMDB_IMAGE_BASE}/w342${movie.poster_path}` : 'assets/poster-placeholder.jpg'}" alt="${movie.title}" loading="lazy">
+                <div class="movie-overlay">
+                    <button class="btn-play" data-id="${movie.id}" data-type="movie">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="btn-info-sm" data-id="${movie.id}" data-type="movie">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="movie-info">
+                <h4 class="movie-title">${movie.title}</h4>
+                <div class="movie-meta">
+                    <span class="rating"><i class="fas fa-star"></i> ${movie.vote_average.toFixed(1)}</span>
+                    <span class="year">${movie.release_date ? movie.release_date.substring(0, 4) : 'N/A'}</span>
+                </div>
+            </div>
+        `;
+        
+        // Add event listeners
+        const playBtn = card.querySelector('.btn-play');
+        const infoBtn = card.querySelector('.btn-info-sm');
+        
+        playBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const id = this.dataset.id;
+            const type = this.dataset.type;
+            playMedia(id, type, movie.title);
+        });
+        
+        infoBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const id = this.dataset.id;
+            const type = this.dataset.type;
+            showMovieDetails(id, type);
+        });
+        
+        card.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const type = this.dataset.type;
+            showMovieDetails(id, type);
+        });
+        
+        return card;
+    }
+    
+    // Search for movies/TV shows
+    async function performSearch() {
+        const query = searchInput.value.trim();
+        if (!query) return;
+        
+        try {
+            // Redirect to movies page with search query
+            window.location.href = `movies.html?search=${encodeURIComponent(query)}`;
+        } catch (error) {
+            console.error('Error performing search:', error);
+        }
+    }
+    
+    // Show search suggestions
+    async function searchSuggestions(query) {
+        try {
+            const response = await fetch(`${TMDB_BASE_URL}/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=1`);
+            const data = await response.json();
+            
+            // Clear previous results
+            searchResults.innerHTML = '';
+            
+            if (data.results.length === 0) {
+                searchResults.innerHTML = '<div class="search-result-item">No results found</div>';
+                searchResults.style.display = 'block';
+                return;
+            }
+            
+            // Add search results
+            data.results.slice(0, 5).forEach(item => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'search-result-item';
+                
+                const title = item.title || item.name;
+                const type = item.media_type === 'movie' ? 'Movie' : 'TV Show';
+                const year = item.release_date ? item.release_date.substring(0, 4) : item.first_air_date ? item.first_air_date.substring(0, 4) : 'N/A';
+                
+                resultItem.innerHTML = `
+                    <img src="${item.poster_path ? `${TMDB_IMAGE_BASE}/w92${item.poster_path}` : 'assets/poster-placeholder.jpg'}" alt="${title}">
+                    <div class="search-result-info">
+                        <h4>${title}</h4>
+                        <p>${type} • ${year}</p>
+                    </div>
+                `;
+                
+                resultItem.addEventListener('click', function() {
+                    if (item.media_type === 'movie') {
+                        showMovieDetails(item.id, 'movie');
+                    } else {
+                        showMovieDetails(item.id, 'tv');
+                    }
+                    searchInput.value = '';
+                    searchResults.innerHTML = '';
+                    searchResults.style.display = 'none';
+                });
+                
+                searchResults.appendChild(resultItem);
+            });
+            
+            searchResults.style.display = 'block';
+            
+        } catch (error) {
+            console.error('Error fetching search suggestions:', error);
+        }
+    }
+    
+    // Show movie/TV show details modal
+    async function showMovieDetails(id, type) {
+        try {
+            // Show loading in modal
+            document.getElementById('movieDetail').innerHTML = `
+                <div class="loading-detail">
+                    <div class="spinner"></div>
+                    <p>Loading details...</p>
+                </div>
+            `;
+            
+            // Close any open modals first
+            closeAllModals();
+            
+            // Open movie modal
+            openModal(movieModal);
+            
+            // Fetch movie/TV details
+            const endpoint = type === 'movie' ? 'movie' : 'tv';
+            const response = await fetch(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=credits,videos`);
+            const data = await response.json();
+            
+            // Update modal title
+            document.getElementById('modalTitle').textContent = data.title || data.name;
+            
+            // Create detail HTML
+            const detailHTML = `
+                <div class="detail-header">
+                    <div class="detail-poster">
+                        <img src="${data.poster_path ? `${TMDB_IMAGE_BASE}/w500${data.poster_path}` : 'assets/poster-placeholder.jpg'}" alt="${data.title || data.name}">
+                    </div>
+                    <div class="detail-info">
+                        <h2>${data.title || data.name} <span class="year">(${data.release_date ? data.release_date.substring(0, 4) : data.first_air_date ? data.first_air_date.substring(0, 4) : 'N/A'})</span></h2>
+                        <div class="detail-meta">
+                            <span class="rating"><i class="fas fa-star"></i> ${data.vote_average.toFixed(1)}</span>
+                            <span class="duration">${type === 'movie' ? (data.runtime ? `${data.runtime} min` : 'N/A') : (data.episode_run_time ? `${data.episode_run_time[0]} min/ep` : 'N/A')}</span>
+                            <span class="status">${data.status}</span>
+                        </div>
+                        <div class="detail-genres">
+                            ${data.genres.map(genre => `<span class="genre-tag">${genre.name}</span>`).join('')}
+                        </div>
+                        <p class="detail-overview">${data.overview}</p>
+                        <div class="detail-actions">
+                            <button class="btn-watch" id="playDetailBtn" data-id="${id}" data-type="${type}">
+                                <i class="fas fa-play"></i> Watch Now
+                            </button>
+                            <button class="btn-trailer" id="trailerDetailBtn" data-id="${id}" data-type="${type}">
+                                <i class="fas fa-play-circle"></i> Trailer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-cast">
+                    <h3>Cast</h3>
+                    <div class="cast-grid">
+                        ${data.credits.cast.slice(0, 6).map(actor => `
+                            <div class="cast-card">
+                                <div class="cast-img">
+                                    ${actor.profile_path ? 
+                                        `<img src="${TMDB_IMAGE_BASE}/w185${actor.profile_path}" alt="${actor.name}">` : 
+                                        `<div class="no-img"><i class="fas fa-user"></i></div>`
+                                    }
+                                </div>
+                                <div class="cast-info">
+                                    <h5>${actor.name}</h5>
+                                    <p>${actor.character}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('movieDetail').innerHTML = detailHTML;
+            
+            // Add event listeners to buttons in modal
+            document.getElementById('playDetailBtn').addEventListener('click', function() {
+                playMedia(id, type, data.title || data.name);
+                closeModal(movieModal);
+            });
+            
+            document.getElementById('trailerDetailBtn').addEventListener('click', function() {
+                showTrailer(id, type);
+            });
+            
+        } catch (error) {
+            console.error('Error loading movie details:', error);
+            document.getElementById('movieDetail').innerHTML = `
+                <div class="error-detail">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Failed to load details. Please try again later.</p>
+                </div>
+            `;
+        }
+    }
+    
+    // Show trailer modal
+    async function showTrailer(id, type) {
+        try {
+            // Stop any current media players
+            stopAllMediaPlayers();
+            
+            // Show loading in trailer modal
+            document.getElementById('trailerPlayer').innerHTML = `
+                <div class="loading-trailer">
+                    <div class="spinner"></div>
+                    <p>Loading trailer...</p>
+                </div>
+            `;
+            
+            // Close any open modals first
+            closeAllModals();
+            
+            // Open trailer modal
+            openModal(trailerModal);
+            
+            // Fetch videos
+            const endpoint = type === 'movie' ? 'movie' : 'tv';
+            const response = await fetch(`${TMDB_BASE_URL}/${endpoint}/${id}/videos?api_key=${TMDB_API_KEY}`);
+            const data = await response.json();
+            
+            // Find a trailer
+            const trailer = data.results.find(video => 
+                (video.type === 'Trailer' || video.type === 'Teaser') && 
+                video.site === 'YouTube'
+            );
+            
+            if (trailer) {
+                // Embed YouTube trailer without autoplay initially
+                document.getElementById('trailerPlayer').innerHTML = `
+                    <iframe 
+                        id="youtubeTrailer"
+                        width="100%" 
+                        height="100%" 
+                        src="https://www.youtube.com/embed/${trailer.key}?autoplay=0&controls=1&modestbranding=1&rel=0&enablejsapi=1" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                `;
+                
+                currentYouTubePlayer = trailer.key;
+                
+                // Add autoplay after a short delay
+                setTimeout(() => {
+                    const iframe = document.getElementById('youtubeTrailer');
+                    if (iframe) {
+                        iframe.src = iframe.src.replace('autoplay=0', 'autoplay=1');
+                    }
+                }, 300);
+            } else {
+                document.getElementById('trailerPlayer').innerHTML = `
+                    <div class="no-trailer">
+                        <i class="fas fa-film fa-3x"></i>
+                        <p>No trailer available for this title.</p>
+                    </div>
+                `;
+            }
+            
+        } catch (error) {
+            console.error('Error loading trailer:', error);
+            document.getElementById('trailerPlayer').innerHTML = `
+                <div class="error-trailer">
+                    <i class="fas fa-exclamation-triangle fa-3x"></i>
+                    <p>Failed to load trailer. Please try again later.</p>
+                </div>
+            `;
+        }
+    }
+    
+    // Play media in player modal
+    async function playMedia(id, type, title) {
+        try {
+            // Stop any current media players
+            stopAllMediaPlayers();
+            
+            // Show loading in player
+            document.getElementById('playerContainer').innerHTML = `
+                <div class="loading-player">
+                    <div class="spinner"></div>
+                    <p>Loading player...</p>
+                </div>
+            `;
+            
+            // Update player title
+            document.getElementById('playerTitle').textContent = `Playing: ${title}`;
+            document.getElementById('playingTitle').textContent = title;
+            
+            // Close any open modals first
+            closeAllModals();
+            
+            // Open player modal
+            openModal(playerModal);
+            
+            // Get media details for player info
+            const endpoint = type === 'movie' ? 'movie' : 'tv';
+            const response = await fetch(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=credits,similar`);
+            const data = await response.json();
+            
+            // Update player info
+            document.getElementById('playerRating').textContent = data.vote_average.toFixed(1);
+            document.getElementById('playerYear').textContent = data.release_date ? data.release_date.substring(0, 4) : data.first_air_date ? data.first_air_date.substring(0, 4) : 'N/A';
+            document.getElementById('playerDuration').textContent = type === 'movie' ? (data.runtime ? `${data.runtime} min` : 'N/A') : (data.episode_run_time ? `${data.episode_run_time[0]} min/ep` : 'N/A');
+            document.getElementById('playerDescription').textContent = data.overview;
+            
+            // Update cast
+            const castHTML = `
+                <h5>Cast</h5>
+                <div class="cast-scroll">
+                    ${data.credits.cast.slice(0, 8).map(actor => `
+                        <div class="cast-item">
+                            <div class="cast-img-sm">
+                                ${actor.profile_path ? 
+                                    `<img src="${TMDB_IMAGE_BASE}/w92${actor.profile_path}" alt="${actor.name}">` : 
+                                    `<div class="no-img-sm"><i class="fas fa-user"></i></div>`
+                                }
+                            </div>
+                            <div class="cast-info-sm">
+                                <h6>${actor.name}</h6>
+                                <p>${actor.character}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('playerCast').innerHTML = castHTML;
+            
+            // Load similar movies
+            const similarHTML = `
+                <div class="similar-scroll">
+                    ${data.similar.results.slice(0, 5).map(movie => `
+                        <div class="similar-item" data-id="${movie.id}" data-type="${type}">
+                            <img src="${movie.poster_path ? `${TMDB_IMAGE_BASE}/w154${movie.poster_path}` : 'assets/poster-placeholder.jpg'}" alt="${movie.title || movie.name}">
+                            <div class="similar-info">
+                                <h6>${movie.title || movie.name}</h6>
+                                <p><i class="fas fa-star"></i> ${movie.vote_average.toFixed(1)}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('similarMovies').innerHTML = similarHTML;
+            
+            // Add event listeners to similar items
+            document.querySelectorAll('.similar-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const similarId = this.dataset.id;
+                    const similarType = this.dataset.type;
+                    const similarTitle = this.querySelector('h6').textContent;
+                    playMedia(similarId, similarType, similarTitle);
+                });
+            });
+            
+            // Load player based on type
+            const playerIframe = document.createElement('iframe');
+            playerIframe.id = 'vidkingPlayer';
+            playerIframe.width = '100%';
+            playerIframe.height = '100%';
+            playerIframe.frameBorder = '0';
+            playerIframe.allowFullscreen = true;
+            
+            if (type === 'movie') {
+                // Movie player
+                playerIframe.src = `https://www.vidking.net/embed/movie/${id}?color=e50914&autoPlay=true`;
+            } else {
+                // TV player - default to season 1, episode 1
+                playerIframe.src = `https://www.vidking.net/embed/tv/${id}/1/1?color=e50914&autoPlay=true&nextEpisode=true&episodeSelector=true`;
+            }
+            
+            document.getElementById('playerContainer').innerHTML = '';
+            document.getElementById('playerContainer').appendChild(playerIframe);
+            currentVidkingPlayer = playerIframe;
+            
+        } catch (error) {
+            console.error('Error playing media:', error);
+            document.getElementById('playerContainer').innerHTML = `
+                <div class="error-player">
+                    <i class="fas fa-exclamation-triangle fa-3x"></i>
+                    <p>Failed to load player. Please try again later.</p>
+                    <button class="btn-retry" onclick="playMedia(${id}, '${type}', '${title}')">Retry</button>
+                </div>
+            `;
+        }
+    }
+    
+    // Function to stop all media players
+    function stopAllMediaPlayers() {
+        // Stop YouTube player if it exists
+        const youtubePlayer = document.getElementById('youtubeTrailer');
+        if (youtubePlayer) {
+            // Remove the iframe to stop playback
+            youtubePlayer.remove();
+        }
+        
+        // Stop Vidking player if it exists
+        const vidkingPlayer = document.getElementById('vidkingPlayer');
+        if (vidkingPlayer) {
+            // Remove the iframe to stop playback
+            vidkingPlayer.remove();
+        }
+        
+        // Reset player tracking
+        currentYouTubePlayer = null;
+        currentVidkingPlayer = null;
+    }
+    
+    // Open modal with proper animation
+    function openModal(modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+    }
+    
+    // Close modal with proper animation
+    function closeModal(modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+        
+        // Clear modal content after closing
+        setTimeout(() => {
+            if (!modal.classList.contains('active')) {
+                if (modal === trailerModal) {
+                    document.getElementById('trailerPlayer').innerHTML = '<p>Loading trailer...</p>';
+                } else if (modal === playerModal) {
+                    document.getElementById('playerContainer').innerHTML = '<div class="loading-player"><div class="spinner"></div><p>Loading player...</p></div>';
+                }
+            }
+        }, 300);
+    }
+    
+    // Close all modals
+    function closeAllModals() {
+        closeModal(movieModal);
+        closeModal(playerModal);
+        closeModal(trailerModal);
+        stopAllMediaPlayers();
+    }
+    
+    // Save watch progress to localStorage
+    function saveWatchProgress(data) {
+        try {
+            const progressKey = `netstream_progress_${data.mediaType}_${data.id}`;
+            const progressData = {
+                id: data.id,
+                mediaType: data.mediaType,
+                currentTime: data.currentTime,
+                duration: data.duration,
+                progress: data.progress,
+                timestamp: Date.now()
+            };
+            
+            // Store in localStorage
+            localStorage.setItem(progressKey, JSON.stringify(progressData));
+            
+            // Update UI with resume option if applicable
+            if (data.event === 'pause' || data.event === 'ended') {
+                updateResumeButtons(data.id, data.mediaType, data.currentTime, data.duration);
+            }
+            
+        } catch (error) {
+            console.error('Error saving watch progress:', error);
+        }
+    }
+    
+    // Update resume buttons on movie cards
+    function updateResumeButtons(id, mediaType, currentTime, duration) {
+        const progressPercent = (currentTime / duration) * 100;
+        
+        // Find all cards with this media
+        const cards = document.querySelectorAll(`.movie-card[data-id="${id}"][data-type="${mediaType}"]`);
+        
+        cards.forEach(card => {
+            // Add or update progress bar
+            let progressBar = card.querySelector('.progress-bar');
+            if (!progressBar) {
+                progressBar = document.createElement('div');
+                progressBar.className = 'progress-bar';
+                card.querySelector('.movie-poster').appendChild(progressBar);
+            }
+            
+            progressBar.style.width = `${progressPercent}%`;
+            
+            // Update play button to resume
+            const playBtn = card.querySelector('.btn-play');
+            if (playBtn && progressPercent > 5 && progressPercent < 95) {
+                playBtn.innerHTML = '<i class="fas fa-redo"></i>';
+                playBtn.title = 'Resume';
+            }
+        });
+    }
+</script>
