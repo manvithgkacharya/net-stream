@@ -5,10 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NetStream - Stream Movies & TV Shows</title>
+    <link rel="dns-prefetch" href="https://api.tmdb.org">
     <link rel="dns-prefetch" href="https://api.themoviedb.org">
     <link rel="dns-prefetch" href="https://image.tmdb.org">
+    <link rel="dns-prefetch" href="https://wsrv.nl">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://api.tmdb.org" crossorigin>
     <link rel="preconnect" href="https://api.themoviedb.org" crossorigin>
+    <link rel="preconnect" href="https://wsrv.nl" crossorigin>
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -352,8 +356,8 @@
         // API Configuration
         const TMDB_API_KEY = '29133efc18d9b0f0d716be947fc23778';
         const YOUTUBE_API_KEY = 'AIzaSyBafZ-gjeJqEbxMEbemlP_Ftih4eXjBNXc';
-        const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-        const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
+        const TMDB_BASE_URL = (window.NetStreamAPI && NetStreamAPI.getBaseUrl) ? NetStreamAPI.getBaseUrl() : 'https://api.tmdb.org/3';
+        const TMDB_IMAGE_BASE = (window.NetStreamAPI && NetStreamAPI.getImageBase) ? NetStreamAPI.getImageBase() : 'https://image.tmdb.org/t/p';
         const VIDSTUCK_BASE_URL = 'https://www.vidstuck.cc';
 
         // Store current movie/TV data
@@ -723,9 +727,11 @@
                         thumb.className = `hero-thumb ${index === 0 ? 'active' : ''}`;
                         thumb.dataset.index = index;
                         const movieTitle = movie.title || movie.name || 'Featured';
-                        const thumbImg = movie.poster_path ? `${TMDB_IMAGE_BASE}/w185${movie.poster_path}` : POSTER_FALLBACK;
+                        const thumbImg = movie.poster_path
+                            ? (window.NetStreamAPI ? NetStreamAPI.getPosterUrl(movie.poster_path, true) : `${TMDB_IMAGE_BASE}/w185${movie.poster_path}`)
+                            : POSTER_FALLBACK;
                         thumb.innerHTML = `
-                        <img src="${thumbImg}" alt="${movieTitle}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${POSTER_FALLBACK}'">
+                        <img src="${thumbImg}" alt="${movieTitle}" loading="lazy" decoding="async" onerror="window.NetStreamAPI ? NetStreamAPI.handleImageError(this, '${movie.poster_path || ''}', 'w185') : (this.src='${POSTER_FALLBACK}')">
                         <span class="hero-thumb-meta">
                             <small>0${index + 1}</small>
                             <span>${movieTitle}</span>
@@ -884,7 +890,9 @@
                 const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/trending/movie/day?api_key=${TMDB_API_KEY}`);
 
                 // Store trending movies
-                trendingMovies = data.results.slice(0, 10);
+                trendingMovies = (data && data.results && data.results.length > 0)
+                    ? data.results.slice(0, 10)
+                    : (window.NetStreamAPI && NetStreamAPI.getSeed ? NetStreamAPI.getSeed('trendingMovies').results.slice(0, 10) : []);
 
                 // Clear trending slider
                 trendingSlider.innerHTML = '';
@@ -896,8 +904,17 @@
                 });
 
             } catch (error) {
-                console.error('Error loading trending movies:', error);
-                trendingSlider.innerHTML = '<p class="error-msg">Failed to load trending movies. Please try again later.</p>';
+                console.warn('Network issue on mobile; loading seed trending movies:', error);
+                const seedData = window.NetStreamAPI && NetStreamAPI.getSeed ? NetStreamAPI.getSeed('trendingMovies') : null;
+                if (seedData && seedData.results) {
+                    trendingMovies = seedData.results.slice(0, 10);
+                    trendingSlider.innerHTML = '';
+                    trendingMovies.forEach((movie, index) => {
+                        trendingSlider.appendChild(createMovieCard(movie, index + 1));
+                    });
+                } else {
+                    trendingSlider.innerHTML = '<p class="error-msg">Failed to load trending movies. Please check connection.</p>';
+                }
             }
         }
 
@@ -907,7 +924,9 @@
                 const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/movie/top_rated?api_key=${TMDB_API_KEY}`);
 
                 // Store top rated movies
-                topRatedMovies = data.results.slice(0, 12);
+                topRatedMovies = (data && data.results && data.results.length > 0)
+                    ? data.results.slice(0, 12)
+                    : (window.NetStreamAPI && NetStreamAPI.getSeed ? NetStreamAPI.getSeed('topRatedMovies').results.slice(0, 12) : []);
 
                 // Clear top rated grid
                 topRatedMoviesGrid.innerHTML = '';
@@ -919,8 +938,17 @@
                 });
 
             } catch (error) {
-                console.error('Error loading top rated movies:', error);
-                topRatedMoviesGrid.innerHTML = '<p class="error-msg">Failed to load top rated movies. Please try again later.</p>';
+                console.warn('Network issue on mobile; loading seed top rated movies:', error);
+                const seedData = window.NetStreamAPI && NetStreamAPI.getSeed ? NetStreamAPI.getSeed('topRatedMovies') : null;
+                if (seedData && seedData.results) {
+                    topRatedMovies = seedData.results.slice(0, 12);
+                    topRatedMoviesGrid.innerHTML = '';
+                    topRatedMovies.forEach(movie => {
+                        topRatedMoviesGrid.appendChild(createMovieCard(movie));
+                    });
+                } else {
+                    topRatedMoviesGrid.innerHTML = '<p class="error-msg">Failed to load top rated movies. Please check connection.</p>';
+                }
             }
         }
 
@@ -931,7 +959,9 @@
                 const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/discover/movie?api_key=${TMDB_API_KEY}&with_original_language=hi&sort_by=release_date.desc&page=1`);
 
                 // Store Indian movies
-                indianMovies = data.results.slice(0, 10);
+                indianMovies = (data && data.results && data.results.length > 0)
+                    ? data.results.slice(0, 10)
+                    : (window.NetStreamAPI && NetStreamAPI.getSeed ? NetStreamAPI.getSeed('indianMovies').results.slice(0, 10) : []);
 
                 // Clear OTT slider
                 ottSlider.innerHTML = '';
@@ -943,8 +973,17 @@
                 });
 
             } catch (error) {
-                console.error('Error loading Indian movies:', error);
-                ottSlider.innerHTML = '<p class="error-msg">Failed to load Indian OTT releases. Please try again later.</p>';
+                console.warn('Network issue on mobile; loading seed Indian movies:', error);
+                const seedData = window.NetStreamAPI && NetStreamAPI.getSeed ? NetStreamAPI.getSeed('indianMovies') : null;
+                if (seedData && seedData.results) {
+                    indianMovies = seedData.results.slice(0, 10);
+                    ottSlider.innerHTML = '';
+                    indianMovies.forEach(movie => {
+                        ottSlider.appendChild(createMovieCard(movie));
+                    });
+                } else {
+                    ottSlider.innerHTML = '<p class="error-msg">Failed to load Indian OTT releases. Please check connection.</p>';
+                }
             }
         }
 
@@ -955,7 +994,9 @@
                 const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}&page=2`);
 
                 // Store recommended movies
-                recommendedMovies = data.results.slice(0, 6);
+                recommendedMovies = (data && data.results && data.results.length > 0)
+                    ? data.results.slice(0, 6)
+                    : (window.NetStreamAPI && NetStreamAPI.getSeed ? NetStreamAPI.getSeed('topRatedMovies').results.slice(0, 6) : []);
 
                 // Clear recommended grid
                 recommendedGrid.innerHTML = '';
@@ -967,8 +1008,17 @@
                 });
 
             } catch (error) {
-                console.error('Error loading recommended movies:', error);
-                recommendedGrid.innerHTML = '<p class="error-msg">Failed to load recommendations. Please try again later.</p>';
+                console.warn('Network issue on mobile; loading seed recommendations:', error);
+                const seedData = window.NetStreamAPI && NetStreamAPI.getSeed ? NetStreamAPI.getSeed('topRatedMovies') : null;
+                if (seedData && seedData.results) {
+                    recommendedMovies = seedData.results.slice(0, 6);
+                    recommendedGrid.innerHTML = '';
+                    recommendedMovies.forEach(movie => {
+                        recommendedGrid.appendChild(createMovieCard(movie));
+                    });
+                } else {
+                    recommendedGrid.innerHTML = '<p class="error-msg">Failed to load recommendations. Please check connection.</p>';
+                }
             }
         }
 
@@ -1007,7 +1057,7 @@
             ${rankBadge}
             <div class="movie-poster">
                 <span class="rating-pill rating-badge-overlay ${ratingInfo.tier}"><i class="fas fa-star"></i> ${ratingInfo.text}</span>
-                <img src="${posterUrl}" alt="${movie.title}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${POSTER_FALLBACK}'">
+                <img src="${posterUrl}" alt="${movie.title}" loading="lazy" decoding="async" onerror="window.NetStreamAPI ? NetStreamAPI.handleImageError(this, '${movie.poster_path || ''}', 'w185') : (this.src='${POSTER_FALLBACK}')">
                 <div class="movie-overlay">
                     <button class="btn-play" data-id="${movie.id}" data-type="movie" aria-label="Play ${movie.title}">
                         <i class="fas fa-play"></i>
@@ -1092,8 +1142,12 @@
                     const year = item.release_date ? item.release_date.substring(0, 4) : item.first_air_date ? item.first_air_date.substring(0, 4) : 'N/A';
                     const ratingInfo = formatRating(item.vote_average, item.vote_count);
 
+                    const posterThumb = item.poster_path
+                        ? (window.NetStreamAPI ? NetStreamAPI.getPosterUrl(item.poster_path, true) : `${TMDB_IMAGE_BASE}/w92${item.poster_path}`)
+                        : POSTER_FALLBACK;
+
                     resultItem.innerHTML = `
-                    <img src="${item.poster_path ? `${TMDB_IMAGE_BASE}/w92${item.poster_path}` : POSTER_FALLBACK}" alt="${title}">
+                    <img src="${posterThumb}" alt="${title}" onerror="window.NetStreamAPI ? NetStreamAPI.handleImageError(this, '${item.poster_path || ''}', 'w185') : (this.src='${POSTER_FALLBACK}')">
                     <div class="search-result-info">
                         <h4>${title}</h4>
                         <p>
@@ -1151,8 +1205,8 @@
                 const ratingInfo = formatRating(data.vote_average, data.vote_count);
                 const director = getDirectorOrCreator(data, type);
                 const castList = getCastList(data, 12);
-                const backdropUrl = data.backdrop_path ? `${TMDB_IMAGE_BASE}/w1280${data.backdrop_path}` : '';
-                const posterUrl = data.poster_path ? `${TMDB_IMAGE_BASE}/w500${data.poster_path}` : POSTER_FALLBACK;
+                const backdropUrl = data.backdrop_path ? (window.NetStreamAPI ? NetStreamAPI.getBackdropUrl(data.backdrop_path) : `${TMDB_IMAGE_BASE}/w1280${data.backdrop_path}`) : '';
+                const posterUrl = data.poster_path ? (window.NetStreamAPI ? NetStreamAPI.getPosterUrl(data.poster_path) : `${TMDB_IMAGE_BASE}/w500${data.poster_path}`) : POSTER_FALLBACK;
                 const runtimeText = type === 'movie'
                     ? (data.runtime ? `${data.runtime} min` : 'N/A')
                     : (data.episode_run_time && data.episode_run_time.length > 0 ? `${data.episode_run_time[0]} min/ep` : 'N/A');
@@ -1165,7 +1219,7 @@
                 <div class="detail-backdrop-banner" ${backdropUrl ? `style="background-image: url('${backdropUrl}')"` : ''}>
                     <div class="detail-header">
                         <div class="detail-poster">
-                            <img src="${posterUrl}" alt="${title}">
+                            <img src="${posterUrl}" alt="${title}" onerror="window.NetStreamAPI ? NetStreamAPI.handleImageError(this, '${data.poster_path || ''}', 'w500') : (this.src='${POSTER_FALLBACK}')">
                         </div>
                         <div class="detail-info">
                             <h2>${title} <span class="year">(${year})</span></h2>
@@ -1201,7 +1255,7 @@
                                 <div class="cast-card">
                                     <div class="cast-img">
                                         ${actor.profile_path ?
-                        `<img src="${TMDB_IMAGE_BASE}/w185${actor.profile_path}" alt="${actor.name}" loading="lazy">` :
+                        `<img src="${window.NetStreamAPI ? NetStreamAPI.getPosterUrl(actor.profile_path, true) : `${TMDB_IMAGE_BASE}/w185${actor.profile_path}`}" alt="${actor.name}" loading="lazy" onerror="window.NetStreamAPI ? NetStreamAPI.handleImageError(this, '${actor.profile_path}', 'w185') : (this.src='${POSTER_FALLBACK}')">` :
                         `<div class="no-img"><i class="fas fa-user"></i></div>`
                     }
                                     </div>

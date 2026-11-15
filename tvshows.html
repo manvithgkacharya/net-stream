@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TV Shows - NetStream | Stream TV Series & Anime</title>
+    <link rel="dns-prefetch" href="https://api.tmdb.org">
     <link rel="dns-prefetch" href="https://api.themoviedb.org">
     <link rel="dns-prefetch" href="https://image.tmdb.org">
+    <link rel="dns-prefetch" href="https://wsrv.nl">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://api.tmdb.org" crossorigin>
     <link rel="preconnect" href="https://api.themoviedb.org" crossorigin>
+    <link rel="preconnect" href="https://wsrv.nl" crossorigin>
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1033,8 +1037,8 @@
 <script>
     // API Configuration
     const TMDB_API_KEY = '29133efc18d9b0f0d716be947fc23778';
-    const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-    const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
+    const TMDB_BASE_URL = (window.NetStreamAPI && NetStreamAPI.getBaseUrl) ? NetStreamAPI.getBaseUrl() : 'https://api.tmdb.org/3';
+    const TMDB_IMAGE_BASE = (window.NetStreamAPI && NetStreamAPI.getImageBase) ? NetStreamAPI.getImageBase() : 'https://image.tmdb.org/t/p';
     const VIDSTUCK_BASE_URL = 'https://www.vidstuck.cc';
     
     // TV Shows page state
@@ -1570,15 +1574,25 @@
             setupTvPagination();
             
         } catch (error) {
-            console.error('Error loading TV shows:', error);
+            console.warn('Network issue on mobile; serving seed TV shows:', error);
             tvLoading.style.display = 'none';
-            tvNoResults.style.display = 'block';
-            tvNoResults.innerHTML = `
-                <i class="fas fa-exclamation-triangle"></i>
-                <h3>Error Loading TV Shows</h3>
-                <p>Failed to load TV shows. Please check your connection and try again.</p>
-                <button class="tv-btn-explore" onclick="loadTvShows()">Retry</button>
-            `;
+            const seedData = window.NetStreamAPI && NetStreamAPI.getSeed ? NetStreamAPI.getSeed('trendingTv') : null;
+            if (seedData && seedData.results && seedData.results.length > 0) {
+                tvGrid.innerHTML = '';
+                seedData.results.forEach(tvShow => {
+                    tvGrid.appendChild(createTvCard(tvShow));
+                });
+                tvCount.textContent = seedData.results.length.toString();
+                tvNoResults.style.display = 'none';
+            } else {
+                tvNoResults.style.display = 'block';
+                tvNoResults.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Error Loading TV Shows</h3>
+                    <p>Failed to load TV shows. Please check your connection and try again.</p>
+                    <button class="tv-btn-explore" onclick="loadTvShows()">Retry</button>
+                `;
+            }
         }
     }
     
@@ -1612,7 +1626,7 @@
         card.innerHTML = `
             <div class="movie-poster">
                 <span class="rating-pill rating-badge-overlay ${ratingInfo.tier}"><i class="fas fa-star"></i> ${ratingInfo.text}</span>
-                <img src="${posterUrl}" alt="${tvShow.name}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${TV_POSTER_FALLBACK}'">
+                <img src="${posterUrl}" alt="${tvShow.name}" loading="lazy" decoding="async" onerror="window.NetStreamAPI ? NetStreamAPI.handleImageError(this, '${tvShow.poster_path || ''}', 'w185') : (this.src='${TV_POSTER_FALLBACK}')">
                 <div class="movie-overlay">
                     <button class="btn-play" data-id="${tvShow.id}" data-type="tv" aria-label="Play ${tvShow.name}">
                         <i class="fas fa-play"></i>
@@ -1914,11 +1928,11 @@
                 const year = item.release_date ? item.release_date.substring(0, 4) : item.first_air_date ? item.first_air_date.substring(0, 4) : 'N/A';
                 const ratingInfo = formatRating(item.vote_average, item.vote_count);
                 const posterUrl = item.poster_path ? 
-                    `${TMDB_IMAGE_BASE}/w92${item.poster_path}` : 
+                    (window.NetStreamAPI ? NetStreamAPI.getPosterUrl(item.poster_path, true) : `${TMDB_IMAGE_BASE}/w92${item.poster_path}`) : 
                     TV_POSTER_FALLBACK;
                 
                 resultItem.innerHTML = `
-                    <img src="${posterUrl}" alt="${title}">
+                    <img src="${posterUrl}" alt="${title}" onerror="window.NetStreamAPI ? NetStreamAPI.handleImageError(this, '${item.poster_path || ''}', 'w185') : (this.src='${TV_POSTER_FALLBACK}')">
                     <div class="search-result-info">
                         <h4>${title}</h4>
                         <p>
@@ -1971,8 +1985,8 @@
             const ratingInfo = formatRating(tvData.vote_average, tvData.vote_count);
             const creator = getDirectorOrCreator(tvData, 'tv');
             const castList = getCastList(tvData, 12);
-            const backdropUrl = tvData.backdrop_path ? `${TMDB_IMAGE_BASE}/w1280${tvData.backdrop_path}` : '';
-            const posterUrl = tvData.poster_path ? `${TMDB_IMAGE_BASE}/w500${tvData.poster_path}` : TV_POSTER_FALLBACK;
+            const backdropUrl = tvData.backdrop_path ? (window.NetStreamAPI ? NetStreamAPI.getBackdropUrl(tvData.backdrop_path) : `${TMDB_IMAGE_BASE}/w1280${tvData.backdrop_path}`) : '';
+            const posterUrl = tvData.poster_path ? (window.NetStreamAPI ? NetStreamAPI.getPosterUrl(tvData.poster_path) : `${TMDB_IMAGE_BASE}/w500${tvData.poster_path}`) : TV_POSTER_FALLBACK;
             const runtimeText = (tvData.episode_run_time && tvData.episode_run_time.length > 0)
                 ? `${tvData.episode_run_time[0]} min/ep`
                 : 'N/A';
@@ -2005,7 +2019,7 @@
                 <div class="detail-backdrop-banner" ${backdropUrl ? `style="background-image: url('${backdropUrl}')"` : ''}>
                     <div class="detail-header">
                         <div class="detail-poster">
-                            <img src="${posterUrl}" alt="${title}">
+                            <img src="${posterUrl}" alt="${title}" onerror="window.NetStreamAPI ? NetStreamAPI.handleImageError(this, '${tvData.poster_path || ''}', 'w500') : (this.src='${TV_POSTER_FALLBACK}')">
                         </div>
                         <div class="detail-info">
                             <h2>${title} <span class="year">(${year})</span></h2>
@@ -2043,7 +2057,7 @@
                                 <div class="cast-card">
                                     <div class="cast-img">
                                         ${actor.profile_path ? 
-                                            `<img src="${TMDB_IMAGE_BASE}/w185${actor.profile_path}" alt="${actor.name}" loading="lazy">` : 
+                                            `<img src="${window.NetStreamAPI ? NetStreamAPI.getPosterUrl(actor.profile_path, true) : `${TMDB_IMAGE_BASE}/w185${actor.profile_path}`}" alt="${actor.name}" loading="lazy" onerror="window.NetStreamAPI ? NetStreamAPI.handleImageError(this, '${actor.profile_path}', 'w185') : (this.src='${TV_POSTER_FALLBACK}')">` : 
                                             `<div class="no-img"><i class="fas fa-user"></i></div>`
                                         }
                                     </div>
@@ -2250,12 +2264,12 @@
                 tvData.similar.results.slice(0, 6).forEach(tvShow => {
                     const similarRating = formatRating(tvShow.vote_average, tvShow.vote_count);
                     const posterUrl = tvShow.poster_path ? 
-                        `${TMDB_IMAGE_BASE}/w154${tvShow.poster_path}` : 
+                        (window.NetStreamAPI ? NetStreamAPI.getPosterUrl(tvShow.poster_path, true) : `${TMDB_IMAGE_BASE}/w154${tvShow.poster_path}`) : 
                         TV_POSTER_FALLBACK;
                     
                     similarHTML += `
                         <div class="similar-item" data-id="${tvShow.id}" data-type="tv">
-                            <img src="${posterUrl}" alt="${tvShow.name}" loading="lazy">
+                            <img src="${posterUrl}" alt="${tvShow.name}" loading="lazy" onerror="window.NetStreamAPI ? NetStreamAPI.handleImageError(this, '${tvShow.poster_path || ''}', 'w185') : (this.src='${TV_POSTER_FALLBACK}')">
                             <div class="similar-info">
                                 <h6>${tvShow.name}</h6>
                                 <p><i class="fas fa-star"></i> ${similarRating.label}</p>

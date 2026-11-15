@@ -2981,3 +2981,114 @@ button, input, select {
         gap: 1.75rem;
     }
 }
+
+/* ===== Carrier / Mobile Data Notice Banner ===== */
+.carrier-notice-banner {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    z-index: 10000;
+    max-width: 92%;
+    width: 520px;
+    background: rgba(14, 16, 26, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(229, 9, 20, 0.35);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 24px rgba(229, 9, 20, 0.15);
+    border-radius: 14px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: #e2e8f0;
+    font-size: 0.84rem;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.carrier-notice-banner.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.carrier-notice-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(229, 9, 20, 0.25), rgba(255, 68, 68, 0.1));
+    border: 1px solid rgba(229, 9, 20, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff4d4d;
+    font-size: 1rem;
+}
+
+.carrier-notice-text {
+    flex: 1;
+    line-height: 1.35;
+}
+
+.carrier-notice-text strong {
+    display: block;
+    color: #ffffff;
+    font-size: 0.88rem;
+    margin-bottom: 2px;
+}
+
+.carrier-notice-text span {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+.carrier-notice-text em {
+    color: #f1f5f9;
+    font-style: normal;
+    font-family: monospace;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 1px 4px;
+    border-radius: 4px;
+}
+
+.carrier-notice-close {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+}
+
+.carrier-notice-close:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 640px) {
+    .carrier-notice-banner {
+        bottom: 14px;
+        padding: 10px 12px;
+        gap: 10px;
+        font-size: 0.78rem;
+    }
+    .carrier-notice-icon {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        font-size: 0.85rem;
+    }
+    .carrier-notice-text strong {
+        font-size: 0.82rem;
+    }
+    .carrier-notice-text span {
+        font-size: 0.75rem;
+    }
+}
+

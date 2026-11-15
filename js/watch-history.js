@@ -214,7 +214,7 @@
 
         card.innerHTML = `
             <div class="cw-thumb-wrapper">
-                <img src="${backdropUrl}" alt="${safeTitle}" class="cw-thumb-img" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${BACKDROP_FALLBACK}'">
+                <img src="${backdropUrl}" alt="${safeTitle}" class="cw-thumb-img" loading="lazy" decoding="async" onerror="window.NetStreamAPI ? NetStreamAPI.handleImageError(this, '${item.backdrop_path || item.poster_path || ''}', 'w780') : (this.src='${BACKDROP_FALLBACK}')">
                 <div class="cw-thumb-gradient"></div>
                 <div class="cw-badge-row">
                     <span class="cw-type-badge ${isTv ? 'is-tv' : 'is-movie'}">
