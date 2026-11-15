@@ -6,7 +6,7 @@
     const STORAGE_KEY = 'netstream_watch_history';
     const MAX_HISTORY_ITEMS = 30;
     const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
-    const BACKDROP_FALLBACK = 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=780&auto=format&fit=crop&q=80';
+    const BACKDROP_FALLBACK = 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=600&auto=format&fit=crop&q=70';
 
     function escapeHtml(value) {
         return String(value == null ? '' : value)
@@ -200,8 +200,8 @@
         const isTv = item.mediaType === 'tv';
         const safeTitle = escapeHtml(item.title || (isTv ? 'TV Show' : 'Movie'));
         const backdropUrl = item.backdrop_path
-            ? `${TMDB_IMAGE_BASE}/w780${item.backdrop_path}`
-            : (item.poster_path ? `${TMDB_IMAGE_BASE}/w500${item.poster_path}` : BACKDROP_FALLBACK);
+            ? (window.NetStreamAPI ? NetStreamAPI.getBackdropUrl(item.backdrop_path) : `${TMDB_IMAGE_BASE}/w780${item.backdrop_path}`)
+            : (item.poster_path ? (window.NetStreamAPI ? NetStreamAPI.getPosterUrl(item.poster_path) : `${TMDB_IMAGE_BASE}/w342${item.poster_path}`) : BACKDROP_FALLBACK);
 
         const progressPercent = Math.min(100, Math.max(0, Math.round(item.progress || 0)));
         const timeRemaining = formatTimeRemaining(item.currentTime, item.duration);
@@ -214,7 +214,7 @@
 
         card.innerHTML = `
             <div class="cw-thumb-wrapper">
-                <img src="${backdropUrl}" alt="${safeTitle}" class="cw-thumb-img" loading="lazy" onerror="this.onerror=null;this.src='${BACKDROP_FALLBACK}'">
+                <img src="${backdropUrl}" alt="${safeTitle}" class="cw-thumb-img" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${BACKDROP_FALLBACK}'">
                 <div class="cw-thumb-gradient"></div>
                 <div class="cw-badge-row">
                     <span class="cw-type-badge ${isTv ? 'is-tv' : 'is-movie'}">

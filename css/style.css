@@ -1532,6 +1532,58 @@ button, input, select {
     border-color: rgba(255, 255, 255, 0.22);
 }
 
+/* ===== Mobile-Optimized Skeleton Loaders ===== */
+.skeleton-card {
+    flex: 0 0 210px;
+    scroll-snap-align: start;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: rgba(16, 18, 30, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+}
+
+.skeleton-poster {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    background: #121422;
+}
+
+.skeleton-info {
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.skeleton-line {
+    height: 12px;
+    border-radius: var(--radius-pill);
+    background: #1b1e32;
+}
+
+.skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.06) 50%, transparent 100%);
+    animation: skeletonShimmer 1.5s infinite;
+}
+
+@keyframes skeletonShimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
 .rank-badge {
     position: absolute;
     top: 10px;
@@ -2848,7 +2900,9 @@ button, input, select {
     }
 
     .movies-grid .movie-card,
-    .recommended-grid .movie-card {
+    .recommended-grid .movie-card,
+    .movies-grid .skeleton-card,
+    .recommended-grid .skeleton-card {
         flex: none;
         width: 100%;
     }

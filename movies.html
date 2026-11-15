@@ -4,12 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movies - NetStream | Stream Unlimited Movies</title>
+    <link rel="dns-prefetch" href="https://api.themoviedb.org">
+    <link rel="dns-prefetch" href="https://image.tmdb.org">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://api.themoviedb.org" crossorigin>
+    <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <script src="js/api-cache.js"></script>
     <script src="js/watch-history.js"></script>
     <style>
         /* Movies Page Specific Styles */
@@ -20,7 +27,7 @@
                 radial-gradient(ellipse 70% 80% at 20% 20%, rgba(229, 9, 20, 0.28), transparent 60%),
                 radial-gradient(ellipse 60% 70% at 85% 30%, rgba(34, 211, 238, 0.16), transparent 60%),
                 linear-gradient(to bottom, rgba(5, 5, 9, 0.45), var(--darker-bg)),
-                url('https://images.unsplash.com/photo-1489599809516-9827b6d1cf13?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+                url('https://images.unsplash.com/photo-1489599809516-9827b6d1cf13?ixlib=rb-4.0.3&auto=format&fit=crop&w=960&q=65');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -467,7 +474,7 @@
                     <span class="notification-count">3</span>
                 </button>
                 <div class="user-profile">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="User" class="user-avatar">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=96&h=96&crop=faces&q=70" alt="User" class="user-avatar" loading="lazy" decoding="async">
                     <div class="user-dropdown">
                         <a href="#"><i class="fas fa-user"></i> Profile</a>
                         <a href="#"><i class="fas fa-cog"></i> Settings</a>
@@ -843,15 +850,24 @@
     const modalStack = [];
     let isHandlingPopState = false;
     
+    let loadingHidden = false;
+    function hideLoadingScreen() {
+        if (loadingHidden || !loadingScreen) return;
+        loadingHidden = true;
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 350);
+    }
+
     // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
-        // Hide loading screen after 1 second
-        setTimeout(() => {
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-            }, 500);
-        }, 1000);
+        // Guaranteed dismiss of loading screen after 1.2s max on mobile networks
+        setTimeout(hideLoadingScreen, 1200);
+
+        if (window.NetStreamAPI && NetStreamAPI.renderSkeletons) {
+            NetStreamAPI.renderSkeletons(moviesGrid, 8);
+        }
         
         // Check URL parameters for search query
         const urlParams = new URLSearchParams(window.location.search);
@@ -1171,8 +1187,7 @@
                     // For keywords, we need to search for keyword IDs first
                     // This is a simplified version - in production you'd want to handle this properly
                     try {
-                        const keywordResponse = await fetch(`${TMDB_BASE_URL}/search/keyword?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(currentKeywords)}`);
-                        const keywordData = await keywordResponse.json();
+                        const keywordData = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/search/keyword?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(currentKeywords)}`, { ttl: 15 * 60 * 1000 });
                         if (keywordData.results.length > 0) {
                             const keywordId = keywordData.results[0].id;
                             url += `&with_keywords=${keywordId}`;
@@ -1183,11 +1198,12 @@
                 }
             }
             
-            const response = await fetch(url);
-            const data = await response.json();
+            const data = await NetStreamAPI.fetchCached(url);
+            hideLoadingScreen();
             
             // Hide loading
             moviesLoading.style.display = 'none';
+            moviesGrid.innerHTML = '';
             
             // Update counts
             totalResults = data.total_results;
@@ -1247,14 +1263,12 @@
         }
         
         const ratingInfo = formatRating(movie.vote_average, movie.vote_count);
-        const posterUrl = movie.poster_path ? 
-            `${TMDB_IMAGE_BASE}/w342${movie.poster_path}` : 
-            POSTER_FALLBACK;
+        const posterUrl = window.NetStreamAPI ? NetStreamAPI.getPosterUrl(movie.poster_path) : (movie.poster_path ? `${TMDB_IMAGE_BASE}/w185${movie.poster_path}` : POSTER_FALLBACK);
         
         card.innerHTML = `
             <div class="movie-poster">
                 <span class="rating-pill rating-badge-overlay ${ratingInfo.tier}"><i class="fas fa-star"></i> ${ratingInfo.text}</span>
-                <img src="${posterUrl}" alt="${movie.title}" loading="lazy" onerror="this.onerror=null;this.src='${POSTER_FALLBACK}'">
+                <img src="${posterUrl}" alt="${movie.title}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${POSTER_FALLBACK}'">
                 <div class="movie-overlay">
                     <button class="btn-play" data-id="${movie.id}" data-type="movie" aria-label="Play ${movie.title}">
                         <i class="fas fa-play"></i>
@@ -1391,8 +1405,7 @@
     // Load movie genres for filter
     async function loadGenres() {
         try {
-            const response = await fetch(`${TMDB_BASE_URL}/genre/movie/list?api_key=${TMDB_API_KEY}`);
-            const data = await response.json();
+            const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/genre/movie/list?api_key=${TMDB_API_KEY}`, { ttl: 60 * 60 * 1000 });
             
             allGenres = data.genres || [];
             
@@ -1529,8 +1542,7 @@
     // Show search suggestions
     async function searchSuggestions(query) {
         try {
-            const response = await fetch(`${TMDB_BASE_URL}/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=1`);
-            const data = await response.json();
+            const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=1`, { ttl: 5 * 60 * 1000 });
             
             // Clear previous results
             searchResults.innerHTML = '';
@@ -1606,8 +1618,7 @@
             // Fetch movie/TV details
             const endpoint = type === 'movie' ? 'movie' : 'tv';
             const append = type === 'tv' ? 'credits,aggregate_credits,videos' : 'credits,videos';
-            const response = await fetch(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=${append}`);
-            const data = await response.json();
+            const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=${append}`);
             
             const title = data.title || data.name || 'Untitled';
             const year = data.release_date ? data.release_date.substring(0, 4) : data.first_air_date ? data.first_air_date.substring(0, 4) : 'N/A';
@@ -1749,8 +1760,7 @@
     // Fetch official trailer from TMDB (English first, then original language fallback)
     async function fetchOfficialTrailer(id, type) {
         const endpoint = type === 'movie' ? 'movie' : 'tv';
-        const detailRes = await fetch(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=videos`);
-        const detailData = await detailRes.json();
+        const detailData = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=videos`);
         
         const originalLang = detailData.original_language || 'en';
         const candidates = Array.isArray(detailData.videos && detailData.videos.results)
@@ -1763,8 +1773,7 @@
         
         if (!hasOfficialEnTrailer && originalLang !== 'en') {
             try {
-                const origRes = await fetch(`${TMDB_BASE_URL}/${endpoint}/${id}/videos?api_key=${TMDB_API_KEY}&language=${encodeURIComponent(originalLang)}`);
-                const origData = await origRes.json();
+                const origData = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/${endpoint}/${id}/videos?api_key=${TMDB_API_KEY}&language=${encodeURIComponent(originalLang)}`);
                 if (Array.isArray(origData.results)) {
                     const seenKeys = new Set(candidates.map(v => v.key));
                     origData.results.forEach(v => {
@@ -1781,8 +1790,7 @@
         
         if (candidates.length === 0) {
             try {
-                const fallbackRes = await fetch(`${TMDB_BASE_URL}/${endpoint}/${id}/videos?api_key=${TMDB_API_KEY}&include_video_language=en,${encodeURIComponent(originalLang)},null`);
-                const fallbackData = await fallbackRes.json();
+                const fallbackData = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/${endpoint}/${id}/videos?api_key=${TMDB_API_KEY}&include_video_language=en,${encodeURIComponent(originalLang)},null`);
                 if (Array.isArray(fallbackData.results)) {
                     candidates.push(...fallbackData.results);
                 }
@@ -1928,8 +1936,7 @@
             // Get media details for player info
             const endpoint = type === 'movie' ? 'movie' : 'tv';
             const append = type === 'tv' ? 'credits,aggregate_credits,similar' : 'credits,similar';
-            const response = await fetch(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=${append}`);
-            const data = await response.json();
+            const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=${append}`);
 
             // Record in Continue Watching history
             if (window.NetStreamHistory) {

@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NetStream - Stream Movies & TV Shows</title>
+    <link rel="dns-prefetch" href="https://api.themoviedb.org">
+    <link rel="dns-prefetch" href="https://image.tmdb.org">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://api.themoviedb.org" crossorigin>
+    <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <script src="js/api-cache.js"></script>
     <script src="js/watch-history.js"></script>
 </head>
+
 <body>
     <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
@@ -36,7 +47,7 @@
                     <h1><span class="logo-highlight">NET</span>STREAM</h1>
                 </a>
             </div>
-            
+
             <div class="nav-links" id="navLinks">
                 <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Home</a>
                 <a href="movies.html" class="nav-link"><i class="fas fa-film"></i> Movies</a>
@@ -49,14 +60,15 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="nav-actions">
                 <button class="btn-notification" id="notificationBtn">
                     <i class="fas fa-bell"></i>
                     <span class="notification-count">3</span>
                 </button>
                 <div class="user-profile">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="User" class="user-avatar">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=96&h=96&crop=faces&q=70"
+                        alt="User" class="user-avatar" loading="lazy" decoding="async">
                     <div class="user-dropdown">
                         <a href="#"><i class="fas fa-user"></i> Profile</a>
                         <a href="#"><i class="fas fa-cog"></i> Settings</a>
@@ -65,7 +77,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <button class="btn-mobile-search" id="mobileSearchToggle" type="button" aria-label="Search">
                 <i class="fas fa-search"></i>
             </button>
@@ -80,7 +92,7 @@
         <div class="hero-slider" id="heroSlider">
             <!-- Hero slides will be dynamically loaded here -->
         </div>
-        
+
         <div class="hero-content">
             <div class="hero-vertical-rail" aria-hidden="true">
                 <span class="hero-rail-label"><i class="fas fa-circle"></i> Trending Spotlight</span>
@@ -89,7 +101,8 @@
             <div class="hero-info">
                 <div class="hero-eyebrow">
                     <span class="hero-badge"><i class="fas fa-bolt"></i> Featured Now</span>
-                    <span class="rating-pill rating-mid" id="heroRatingPill"><i class="fas fa-star"></i> <span id="heroRating">0.0</span></span>
+                    <span class="rating-pill rating-mid" id="heroRatingPill"><i class="fas fa-star"></i> <span
+                            id="heroRating">0.0</span></span>
                 </div>
                 <h1 class="hero-title" id="heroTitle">Loading...</h1>
                 <div class="hero-meta">
@@ -112,7 +125,7 @@
                 <div class="hero-genres" id="heroGenres"></div>
             </div>
         </div>
-        
+
         <div class="hero-controls-bar">
             <div class="hero-nav-controls">
                 <button class="hero-nav-btn" id="heroPrevBtn" type="button" aria-label="Previous featured movie">
@@ -143,18 +156,21 @@
                 </div>
             </div>
             <div class="slider-wrapper" id="cwSliderWrapper">
-                <button class="row-slider-btn prev" id="cwPrevBtn" type="button" aria-label="Scroll continue watching left"><i class="fas fa-chevron-left"></i></button>
+                <button class="row-slider-btn prev" id="cwPrevBtn" type="button"
+                    aria-label="Scroll continue watching left"><i class="fas fa-chevron-left"></i></button>
                 <div class="continue-watching-slider" id="continueWatchingSlider">
                     <!-- Continue watching items dynamically loaded here -->
                 </div>
-                <button class="row-slider-btn next" id="cwNextBtn" type="button" aria-label="Scroll continue watching right"><i class="fas fa-chevron-right"></i></button>
+                <button class="row-slider-btn next" id="cwNextBtn" type="button"
+                    aria-label="Scroll continue watching right"><i class="fas fa-chevron-right"></i></button>
             </div>
             <div class="cw-empty-state" id="cwEmptyState" style="display: none;">
                 <div class="cw-empty-card">
                     <div class="cw-empty-icon"><i class="fas fa-history"></i></div>
                     <div class="cw-empty-text">
                         <h4>Your Watch History is Empty</h4>
-                        <p>Stream any movie or TV series below and your progress will automatically save here so you can pick up right where you left off.</p>
+                        <p>Stream any movie or TV series below and your progress will automatically save here so you can
+                            pick up right where you left off.</p>
                     </div>
                 </div>
             </div>
@@ -167,11 +183,13 @@
                 <a href="movies.html?filter=trending" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
             </div>
             <div class="slider-wrapper">
-                <button class="row-slider-btn prev" id="trendingPrevBtn" type="button" aria-label="Scroll trending left"><i class="fas fa-chevron-left"></i></button>
+                <button class="row-slider-btn prev" id="trendingPrevBtn" type="button"
+                    aria-label="Scroll trending left"><i class="fas fa-chevron-left"></i></button>
                 <div class="trending-slider" id="trendingSlider">
                     <!-- Trending items will be dynamically loaded here -->
                 </div>
-                <button class="row-slider-btn next" id="trendingNextBtn" type="button" aria-label="Scroll trending right"><i class="fas fa-chevron-right"></i></button>
+                <button class="row-slider-btn next" id="trendingNextBtn" type="button"
+                    aria-label="Scroll trending right"><i class="fas fa-chevron-right"></i></button>
             </div>
         </section>
 
@@ -193,11 +211,13 @@
                 <a href="movies.html?filter=indian" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
             </div>
             <div class="slider-wrapper">
-                <button class="row-slider-btn prev" id="ottPrevBtn" type="button" aria-label="Scroll OTT releases left"><i class="fas fa-chevron-left"></i></button>
+                <button class="row-slider-btn prev" id="ottPrevBtn" type="button"
+                    aria-label="Scroll OTT releases left"><i class="fas fa-chevron-left"></i></button>
                 <div class="ott-slider" id="ottSlider">
                     <!-- Indian OTT releases will be dynamically loaded here -->
                 </div>
-                <button class="row-slider-btn next" id="ottNextBtn" type="button" aria-label="Scroll OTT releases right"><i class="fas fa-chevron-right"></i></button>
+                <button class="row-slider-btn next" id="ottNextBtn" type="button"
+                    aria-label="Scroll OTT releases right"><i class="fas fa-chevron-right"></i></button>
             </div>
         </section>
 
@@ -225,7 +245,7 @@
                     <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
-            
+
             <div class="footer-links">
                 <div class="footer-column">
                     <h3>NetStream</h3>
@@ -250,7 +270,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="footer-bottom">
             <p>&copy; 2023 NetStream. All rights reserved. This is a demo project for educational purposes.</p>
             <p>Powered by TMDB API</p>
@@ -261,7 +281,8 @@
     <div class="movie-modal" id="movieModal">
         <div class="modal-content large-modal">
             <div class="modal-header">
-                <button type="button" class="modal-back-btn" data-close-modal="movieModal" aria-label="Back"><i class="fas fa-arrow-left"></i> <span>Back</span></button>
+                <button type="button" class="modal-back-btn" data-close-modal="movieModal" aria-label="Back"><i
+                        class="fas fa-arrow-left"></i> <span>Back</span></button>
                 <h3 id="modalTitle">Movie Title</h3>
                 <button type="button" class="close-modal" id="closeMovieBtn" aria-label="Close">&times;</button>
             </div>
@@ -277,9 +298,11 @@
     <div class="player-modal" id="playerModal">
         <div class="modal-content full-modal">
             <div class="modal-header">
-                <button type="button" class="modal-back-btn" data-close-modal="playerModal" aria-label="Back"><i class="fas fa-arrow-left"></i> <span>Back</span></button>
+                <button type="button" class="modal-back-btn" data-close-modal="playerModal" aria-label="Back"><i
+                        class="fas fa-arrow-left"></i> <span>Back</span></button>
                 <h3 id="playerTitle">Playing: Movie Title</h3>
-                <button type="button" class="modal-fullscreen-btn" id="playerFullscreenBtn" aria-label="Toggle Fullscreen"><i class="fas fa-expand"></i> <span>Fullscreen</span></button>
+                <button type="button" class="modal-fullscreen-btn" id="playerFullscreenBtn"
+                    aria-label="Toggle Fullscreen"><i class="fas fa-expand"></i> <span>Fullscreen</span></button>
                 <button type="button" class="close-modal" id="closePlayerBtn" aria-label="Close">&times;</button>
             </div>
             <div class="modal-body">
@@ -312,7 +335,8 @@
     <div class="trailer-modal" id="trailerModal">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="modal-back-btn" data-close-modal="trailerModal" aria-label="Back"><i class="fas fa-arrow-left"></i> <span>Back</span></button>
+                <button type="button" class="modal-back-btn" data-close-modal="trailerModal" aria-label="Back"><i
+                        class="fas fa-arrow-left"></i> <span>Back</span></button>
                 <h3>Official Trailer</h3>
                 <button type="button" class="close-modal" id="closeTrailerBtn" aria-label="Close">&times;</button>
             </div>
@@ -324,642 +348,666 @@
         </div>
     </div>
 
-<script>
-    // API Configuration
-    const TMDB_API_KEY = '29133efc18d9b0f0d716be947fc23778';
-    const YOUTUBE_API_KEY = 'AIzaSyBafZ-gjeJqEbxMEbemlP_Ftih4eXjBNXc';
-    const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-    const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
-    const VIDSTUCK_BASE_URL = 'https://www.vidstuck.cc';
-    
-    // Store current movie/TV data
-    let currentHeroItem = null;
-    let heroMovies = [];
-    let trendingMovies = [];
-    let topRatedMovies = [];
-    let indianMovies = [];
-    let recommendedMovies = [];
-    
-    // Track current players
-    let currentYouTubePlayer = null;
-    let currentVidstuckPlayer = null;
-    let latestTrailerRequestId = 0;
-    let heroInterval = null;
-    const heroDetailsCache = new Map();
-    const POSTER_FALLBACK = 'https://images.unsplash.com/photo-1542204165-65bf26472b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80';
-    
-    // Format TMDB ratings consistently
-    function formatRating(voteAverage, voteCount = null) {
-        const num = Number(voteAverage);
-        if (!Number.isFinite(num) || num <= 0 || voteCount === 0) {
-            return { text: 'NR', label: 'NR', tier: 'rating-nr', votes: '' };
+    <script>
+        // API Configuration
+        const TMDB_API_KEY = '29133efc18d9b0f0d716be947fc23778';
+        const YOUTUBE_API_KEY = 'AIzaSyBafZ-gjeJqEbxMEbemlP_Ftih4eXjBNXc';
+        const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+        const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
+        const VIDSTUCK_BASE_URL = 'https://www.vidstuck.cc';
+
+        // Store current movie/TV data
+        let currentHeroItem = null;
+        let heroMovies = [];
+        let trendingMovies = [];
+        let topRatedMovies = [];
+        let indianMovies = [];
+        let recommendedMovies = [];
+
+        // Track current players
+        let currentYouTubePlayer = null;
+        let currentVidstuckPlayer = null;
+        let latestTrailerRequestId = 0;
+        let heroInterval = null;
+        const heroDetailsCache = new Map();
+        const POSTER_FALLBACK = 'https://images.unsplash.com/photo-1542204165-65bf26472b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80';
+
+        // Format TMDB ratings consistently
+        function formatRating(voteAverage, voteCount = null) {
+            const num = Number(voteAverage);
+            if (!Number.isFinite(num) || num <= 0 || voteCount === 0) {
+                return { text: 'NR', label: 'NR', tier: 'rating-nr', votes: '' };
+            }
+            const fixed = num.toFixed(1);
+            const tier = num >= 7.5 ? 'rating-high' : num >= 5.5 ? 'rating-mid' : 'rating-low';
+            let votes = '';
+            if (typeof voteCount === 'number' && voteCount > 0) {
+                votes = voteCount >= 1000 ? `${(voteCount / 1000).toFixed(1)}k` : `${voteCount}`;
+            }
+            return { text: fixed, label: `${fixed} / 10`, tier, votes };
         }
-        const fixed = num.toFixed(1);
-        const tier = num >= 7.5 ? 'rating-high' : num >= 5.5 ? 'rating-mid' : 'rating-low';
-        let votes = '';
-        if (typeof voteCount === 'number' && voteCount > 0) {
-            votes = voteCount >= 1000 ? `${(voteCount / 1000).toFixed(1)}k` : `${voteCount}`;
+
+        // Extract normalized cast list (supports movies + TV aggregate_credits)
+        function getCastList(data, limit = 12) {
+            const rawCast = (data && data.credits && Array.isArray(data.credits.cast) && data.credits.cast.length > 0)
+                ? data.credits.cast
+                : (data && data.aggregate_credits && Array.isArray(data.aggregate_credits.cast) ? data.aggregate_credits.cast : []);
+
+            return rawCast.slice(0, limit).map(actor => ({
+                name: actor.name || 'Unknown',
+                character: actor.character || (Array.isArray(actor.roles) && actor.roles[0] ? actor.roles[0].character : '') || 'Cast',
+                profile_path: actor.profile_path || null
+            }));
         }
-        return { text: fixed, label: `${fixed} / 10`, tier, votes };
-    }
-    
-    // Extract normalized cast list (supports movies + TV aggregate_credits)
-    function getCastList(data, limit = 12) {
-        const rawCast = (data && data.credits && Array.isArray(data.credits.cast) && data.credits.cast.length > 0)
-            ? data.credits.cast
-            : (data && data.aggregate_credits && Array.isArray(data.aggregate_credits.cast) ? data.aggregate_credits.cast : []);
-        
-        return rawCast.slice(0, limit).map(actor => ({
-            name: actor.name || 'Unknown',
-            character: actor.character || (Array.isArray(actor.roles) && actor.roles[0] ? actor.roles[0].character : '') || 'Cast',
-            profile_path: actor.profile_path || null
-        }));
-    }
-    
-    // Extract director or creator names
-    function getDirectorOrCreator(data, type) {
-        if (!data) return '';
-        if (type === 'tv' && Array.isArray(data.created_by) && data.created_by.length > 0) {
-            return data.created_by.map(c => c.name).filter(Boolean).slice(0, 3).join(', ');
+
+        // Extract director or creator names
+        function getDirectorOrCreator(data, type) {
+            if (!data) return '';
+            if (type === 'tv' && Array.isArray(data.created_by) && data.created_by.length > 0) {
+                return data.created_by.map(c => c.name).filter(Boolean).slice(0, 3).join(', ');
+            }
+            if (data.credits && Array.isArray(data.credits.crew)) {
+                const directors = data.credits.crew.filter(p => p.job === 'Director').map(p => p.name).filter(Boolean);
+                if (directors.length > 0) return directors.slice(0, 2).join(', ');
+            }
+            return '';
         }
-        if (data.credits && Array.isArray(data.credits.crew)) {
-            const directors = data.credits.crew.filter(p => p.job === 'Director').map(p => p.name).filter(Boolean);
-            if (directors.length > 0) return directors.slice(0, 2).join(', ');
-        }
-        return '';
-    }
-    
-    // DOM Elements
-    const loadingScreen = document.getElementById('loadingScreen');
-    const heroSlider = document.getElementById('heroSlider');
-    const heroTitle = document.getElementById('heroTitle');
-    const heroRating = document.getElementById('heroRating');
-    const heroYear = document.getElementById('heroYear');
-    const heroDuration = document.getElementById('heroDuration');
-    const heroDescription = document.getElementById('heroDescription');
-    const heroGenres = document.getElementById('heroGenres');
-    const trendingSlider = document.getElementById('trendingSlider');
-    const topRatedMoviesGrid = document.getElementById('topRatedMovies');
-    const ottSlider = document.getElementById('ottSlider');
-    const recommendedGrid = document.getElementById('recommendedGrid');
-    const searchInput = document.getElementById('searchInput');
-    const searchResults = document.getElementById('searchResults');
-    const searchBtn = document.getElementById('searchBtn');
-    const searchBox = document.querySelector('.search-box');
-    const movieModal = document.getElementById('movieModal');
-    const playerModal = document.getElementById('playerModal');
-    const trailerModal = document.getElementById('trailerModal');
-    const closeMovieBtn = document.getElementById('closeMovieBtn');
-    const closePlayerBtn = document.getElementById('closePlayerBtn');
-    const closeTrailerBtn = document.getElementById('closeTrailerBtn');
-    const modalStack = [];
-    let isHandlingPopState = false;
-    
-    // Initialize the page
-    document.addEventListener('DOMContentLoaded', function() {
-        // Hide loading screen after 1.5 seconds
-        setTimeout(() => {
+
+        // DOM Elements
+        const loadingScreen = document.getElementById('loadingScreen');
+        const heroSlider = document.getElementById('heroSlider');
+        const heroTitle = document.getElementById('heroTitle');
+        const heroRating = document.getElementById('heroRating');
+        const heroYear = document.getElementById('heroYear');
+        const heroDuration = document.getElementById('heroDuration');
+        const heroDescription = document.getElementById('heroDescription');
+        const heroGenres = document.getElementById('heroGenres');
+        const trendingSlider = document.getElementById('trendingSlider');
+        const topRatedMoviesGrid = document.getElementById('topRatedMovies');
+        const ottSlider = document.getElementById('ottSlider');
+        const recommendedGrid = document.getElementById('recommendedGrid');
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const searchBtn = document.getElementById('searchBtn');
+        const searchBox = document.querySelector('.search-box');
+        const movieModal = document.getElementById('movieModal');
+        const playerModal = document.getElementById('playerModal');
+        const trailerModal = document.getElementById('trailerModal');
+        const closeMovieBtn = document.getElementById('closeMovieBtn');
+        const closePlayerBtn = document.getElementById('closePlayerBtn');
+        const closeTrailerBtn = document.getElementById('closeTrailerBtn');
+        const modalStack = [];
+        let isHandlingPopState = false;
+
+        let loadingHidden = false;
+        function hideLoadingScreen() {
+            if (loadingHidden || !loadingScreen) return;
+            loadingHidden = true;
             loadingScreen.style.opacity = '0';
             setTimeout(() => {
                 loadingScreen.style.display = 'none';
-            }, 500);
-        }, 1500);
-        
-        // Load initial data
-        loadHeroSlider();
-        loadTrendingMovies();
-        loadTopRatedMovies();
-        loadIndianMovies();
-        loadRecommendedMovies();
+            }, 350);
+        }
 
-        // Register Continue Watching shelf
-        if (window.NetStreamHistory) {
-            window.NetStreamHistory.registerShelf({
-                sectionId: 'continueWatchingSection',
-                sliderId: 'continueWatchingSlider',
-                emptyId: 'cwEmptyState',
-                clearBtnId: 'clearHistoryBtn',
-                filterType: 'all',
-                onPlay: function(item) {
-                    playMedia(item.id, item.mediaType, item.title);
-                }
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function () {
+            // Render instant skeletons so UI is immediately visible with zero layout shift
+            if (window.NetStreamAPI && NetStreamAPI.renderSkeletons) {
+                NetStreamAPI.renderSkeletons(trendingSlider, 6);
+                NetStreamAPI.renderSkeletons(topRatedMoviesGrid, 6);
+                NetStreamAPI.renderSkeletons(ottSlider, 6);
+                NetStreamAPI.renderSkeletons(recommendedGrid, 6);
+            }
+
+            // Guaranteed dismiss of loading screen after 1.2s max on mobile networks
+            setTimeout(hideLoadingScreen, 1200);
+
+            // Progressive staggered loading: Above-the-fold content loads first
+            loadHeroSlider().finally(() => {
+                hideLoadingScreen();
             });
-        }
-        
-        // Setup event listeners
-        setupEventListeners();
-    });
-    
-    // Setup all event listeners
-    function setupEventListeners() {
-        // Search functionality
-        searchBtn.addEventListener('click', performSearch);
-        searchInput.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                performSearch();
-            } else if (searchInput.value.length > 2) {
-                searchSuggestions(searchInput.value);
-            } else {
-                searchResults.innerHTML = '';
-                searchResults.style.display = 'none';
+            loadTrendingMovies();
+
+            // Stagger secondary below-the-fold requests to prevent cellular socket congestion
+            setTimeout(loadTopRatedMovies, 100);
+            setTimeout(loadIndianMovies, 220);
+            setTimeout(loadRecommendedMovies, 340);
+
+            // Register Continue Watching shelf
+            if (window.NetStreamHistory) {
+                window.NetStreamHistory.registerShelf({
+                    sectionId: 'continueWatchingSection',
+                    sliderId: 'continueWatchingSlider',
+                    emptyId: 'cwEmptyState',
+                    clearBtnId: 'clearHistoryBtn',
+                    filterType: 'all',
+                    onPlay: function (item) {
+                        playMedia(item.id, item.mediaType, item.title);
+                    }
+                });
             }
-        });
-        
-        // Close search results when clicking outside
-        document.addEventListener('click', function(e) {
-            if (searchBox && !searchBox.contains(e.target)) {
-                searchResults.style.display = 'none';
-            }
-        });
-        
-        // Close topmost modal when clicking backdrop
-        window.addEventListener('click', function(e) {
-            if (e.target === movieModal) {
-                closeModal(movieModal);
-            }
-            if (e.target === playerModal) {
-                closeModal(playerModal);
-            }
-            if (e.target === trailerModal) {
-                closeModal(trailerModal);
-            }
-        });
-        
-        // Mobile menu toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinksContainer = document.getElementById('navLinks');
-        if (menuToggle && navLinksContainer) {
-            menuToggle.addEventListener('click', function(e) {
-                e.stopPropagation();
-                navLinksContainer.classList.toggle('active');
-            });
-        }
-        
-        // Mobile search button opens nav panel and focuses search
-        const mobileSearchToggle = document.getElementById('mobileSearchToggle');
-        if (mobileSearchToggle && navLinksContainer) {
-            mobileSearchToggle.addEventListener('click', function(e) {
-                e.stopPropagation();
-                navLinksContainer.classList.add('active');
-                setTimeout(() => {
-                    searchInput.focus();
-                }, 80);
-            });
-        }
-        
-        // Close mobile menu when clicking outside nav
-        document.addEventListener('click', function(e) {
-            if (navLinksContainer && navLinksContainer.classList.contains('active')) {
-                if (!navLinksContainer.contains(e.target) && (!menuToggle || !menuToggle.contains(e.target)) && (!mobileSearchToggle || !mobileSearchToggle.contains(e.target))) {
-                    navLinksContainer.classList.remove('active');
-                }
-            }
-        });
-        
-        // Navigation active state
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                navLinks.forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-                if (navLinksContainer) navLinksContainer.classList.remove('active');
-            });
-        });
-        
-        // Modal Back & Close buttons
-        document.querySelectorAll('.modal-back-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const targetId = this.dataset.closeModal;
-                const modal = targetId ? document.getElementById(targetId) : this.closest('.trailer-modal, .movie-modal, .player-modal');
-                closeModal(modal);
-            });
-        });
-        
-        closeMovieBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            closeModal(movieModal);
-        });
-        
-        closePlayerBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            closeModal(playerModal);
+
+            // Setup event listeners
+            setupEventListeners();
         });
 
-        const playerFullscreenBtn = document.getElementById('playerFullscreenBtn');
-        if (playerFullscreenBtn) {
-            playerFullscreenBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                togglePlayerFullscreen();
-            });
-        }
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-        
-        closeTrailerBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            closeModal(trailerModal);
-        });
-        
-        // Browser / mobile hardware Back button support
-        window.addEventListener('popstate', function() {
-            if (isHandlingPopState) {
-                isHandlingPopState = false;
-                return;
-            }
-            const topModal = getTopOpenModal();
-            if (topModal) {
-                closeModal(topModal, { fromPopState: true });
-                if (getTopOpenModal() && (!history.state || !history.state.netstreamModalOpen)) {
-                    history.pushState({ netstreamModalOpen: true }, '');
+        // Setup all event listeners
+        function setupEventListeners() {
+            // Search functionality
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keyup', function (e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                } else if (searchInput.value.length > 2) {
+                    searchSuggestions(searchInput.value);
+                } else {
+                    searchResults.innerHTML = '';
+                    searchResults.style.display = 'none';
                 }
-            }
-        });
-        
-        // Escape key to close topmost modal
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                if (trailerModal.classList.contains('active')) {
-                    closeModal(trailerModal);
-                } else if (playerModal.classList.contains('active')) {
-                    closeModal(playerModal);
-                } else if (movieModal.classList.contains('active')) {
+            });
+
+            // Close search results when clicking outside
+            document.addEventListener('click', function (e) {
+                if (searchBox && !searchBox.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
+
+            // Close topmost modal when clicking backdrop
+            window.addEventListener('click', function (e) {
+                if (e.target === movieModal) {
                     closeModal(movieModal);
                 }
+                if (e.target === playerModal) {
+                    closeModal(playerModal);
+                }
+                if (e.target === trailerModal) {
+                    closeModal(trailerModal);
+                }
+            });
+
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinksContainer = document.getElementById('navLinks');
+            if (menuToggle && navLinksContainer) {
+                menuToggle.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    navLinksContainer.classList.toggle('active');
+                });
             }
-        });
-        
-        // Horizontal row slider buttons for PC/tablet
-        const bindRowControls = (sliderEl, prevId, nextId) => {
-            const prevEl = document.getElementById(prevId);
-            const nextEl = document.getElementById(nextId);
-            if (!sliderEl) return;
-            const step = () => Math.max(280, Math.round(sliderEl.clientWidth * 0.78));
-            if (prevEl) prevEl.addEventListener('click', () => sliderEl.scrollBy({ left: -step(), behavior: 'smooth' }));
-            if (nextEl) nextEl.addEventListener('click', () => sliderEl.scrollBy({ left: step(), behavior: 'smooth' }));
-        };
-        bindRowControls(document.getElementById('continueWatchingSlider'), 'cwPrevBtn', 'cwNextBtn');
-        bindRowControls(trendingSlider, 'trendingPrevBtn', 'trendingNextBtn');
-        bindRowControls(ottSlider, 'ottPrevBtn', 'ottNextBtn');
-        
-        // Touch swipe support on hero showcase for mobile
-        const heroSection = document.querySelector('.hero-section');
-        if (heroSection) {
-            let touchStartX = 0;
-            let touchStartY = 0;
-            heroSection.addEventListener('touchstart', (e) => {
-                if (e.touches.length !== 1) return;
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
-            }, { passive: true });
-            heroSection.addEventListener('touchend', (e) => {
-                if (!touchStartX || e.changedTouches.length !== 1) return;
-                // Don't hijack swipes inside scrollable hero-thumbs strip
-                if (e.target && e.target.closest('.hero-thumbs')) {
-                    touchStartX = 0;
+
+            // Mobile search button opens nav panel and focuses search
+            const mobileSearchToggle = document.getElementById('mobileSearchToggle');
+            if (mobileSearchToggle && navLinksContainer) {
+                mobileSearchToggle.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    navLinksContainer.classList.add('active');
+                    setTimeout(() => {
+                        searchInput.focus();
+                    }, 80);
+                });
+            }
+
+            // Close mobile menu when clicking outside nav
+            document.addEventListener('click', function (e) {
+                if (navLinksContainer && navLinksContainer.classList.contains('active')) {
+                    if (!navLinksContainer.contains(e.target) && (!menuToggle || !menuToggle.contains(e.target)) && (!mobileSearchToggle || !mobileSearchToggle.contains(e.target))) {
+                        navLinksContainer.classList.remove('active');
+                    }
+                }
+            });
+
+            // Navigation active state
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    if (navLinksContainer) navLinksContainer.classList.remove('active');
+                });
+            });
+
+            // Modal Back & Close buttons
+            document.querySelectorAll('.modal-back-btn').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    const targetId = this.dataset.closeModal;
+                    const modal = targetId ? document.getElementById(targetId) : this.closest('.trailer-modal, .movie-modal, .player-modal');
+                    closeModal(modal);
+                });
+            });
+
+            closeMovieBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                closeModal(movieModal);
+            });
+
+            closePlayerBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                closeModal(playerModal);
+            });
+
+            const playerFullscreenBtn = document.getElementById('playerFullscreenBtn');
+            if (playerFullscreenBtn) {
+                playerFullscreenBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    togglePlayerFullscreen();
+                });
+            }
+            document.addEventListener('fullscreenchange', handleFullscreenChange);
+            document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+
+            closeTrailerBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                closeModal(trailerModal);
+            });
+
+            // Browser / mobile hardware Back button support
+            window.addEventListener('popstate', function () {
+                if (isHandlingPopState) {
+                    isHandlingPopState = false;
                     return;
                 }
-                const dx = e.changedTouches[0].clientX - touchStartX;
-                const dy = e.changedTouches[0].clientY - touchStartY;
-                touchStartX = 0;
-                if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.3) {
-                    slideHero(dx < 0 ? 1 : -1);
+                const topModal = getTopOpenModal();
+                if (topModal) {
+                    closeModal(topModal, { fromPopState: true });
+                    if (getTopOpenModal() && (!history.state || !history.state.netstreamModalOpen)) {
+                        history.pushState({ netstreamModalOpen: true }, '');
+                    }
                 }
-            }, { passive: true });
-        }
-    }
-    
-    function resetHeroAutoSlide() {
-        if (heroInterval) clearInterval(heroInterval);
-        if (heroMovies.length > 1) {
-            heroInterval = setInterval(() => {
-                slideHero(1);
-            }, 8000);
-        }
-    }
-    
-    // Load hero slider with trending movies
-    async function loadHeroSlider() {
-        try {
-            const response = await fetch(`${TMDB_BASE_URL}/trending/movie/week?api_key=${TMDB_API_KEY}`);
-            const data = await response.json();
-            
-            // Get top 5 trending movies for hero
-            heroMovies = data.results.slice(0, 5);
-            
-            // Clear hero slider
-            heroSlider.innerHTML = '';
-            
-            // Add slides to hero
-            heroMovies.forEach((movie, index) => {
-                const slide = document.createElement('div');
-                slide.className = `hero-slide ${index === 0 ? 'active' : ''}`;
-                const backdropUrl = movie.backdrop_path
-                    ? `${TMDB_IMAGE_BASE}/original${movie.backdrop_path}`
-                    : 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1925&q=80';
-                slide.style.backgroundImage = `url('${backdropUrl}')`;
-                slide.dataset.movieId = movie.id;
-                
-                slide.addEventListener('click', function() {
-                    showMovieDetails(movie.id, 'movie');
-                });
-                
-                heroSlider.appendChild(slide);
             });
-            
-            // Render bottom thumbnail switcher with clear high-res poster thumbnails
-            const heroThumbs = document.getElementById('heroThumbs');
-            if (heroThumbs) {
-                heroThumbs.innerHTML = '';
+
+            // Escape key to close topmost modal
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    if (trailerModal.classList.contains('active')) {
+                        closeModal(trailerModal);
+                    } else if (playerModal.classList.contains('active')) {
+                        closeModal(playerModal);
+                    } else if (movieModal.classList.contains('active')) {
+                        closeModal(movieModal);
+                    }
+                }
+            });
+
+            // Horizontal row slider buttons for PC/tablet
+            const bindRowControls = (sliderEl, prevId, nextId) => {
+                const prevEl = document.getElementById(prevId);
+                const nextEl = document.getElementById(nextId);
+                if (!sliderEl) return;
+                const step = () => Math.max(280, Math.round(sliderEl.clientWidth * 0.78));
+                if (prevEl) prevEl.addEventListener('click', () => sliderEl.scrollBy({ left: -step(), behavior: 'smooth' }));
+                if (nextEl) nextEl.addEventListener('click', () => sliderEl.scrollBy({ left: step(), behavior: 'smooth' }));
+            };
+            bindRowControls(document.getElementById('continueWatchingSlider'), 'cwPrevBtn', 'cwNextBtn');
+            bindRowControls(trendingSlider, 'trendingPrevBtn', 'trendingNextBtn');
+            bindRowControls(ottSlider, 'ottPrevBtn', 'ottNextBtn');
+
+            // Touch swipe support on hero showcase for mobile
+            const heroSection = document.querySelector('.hero-section');
+            if (heroSection) {
+                let touchStartX = 0;
+                let touchStartY = 0;
+                heroSection.addEventListener('touchstart', (e) => {
+                    if (e.touches.length !== 1) return;
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }, { passive: true });
+                heroSection.addEventListener('touchend', (e) => {
+                    if (!touchStartX || e.changedTouches.length !== 1) return;
+                    // Don't hijack swipes inside scrollable hero-thumbs strip
+                    if (e.target && e.target.closest('.hero-thumbs')) {
+                        touchStartX = 0;
+                        return;
+                    }
+                    const dx = e.changedTouches[0].clientX - touchStartX;
+                    const dy = e.changedTouches[0].clientY - touchStartY;
+                    touchStartX = 0;
+                    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.3) {
+                        slideHero(dx < 0 ? 1 : -1);
+                    }
+                }, { passive: true });
+            }
+        }
+
+        function resetHeroAutoSlide() {
+            if (heroInterval) clearInterval(heroInterval);
+            if (heroMovies.length > 1) {
+                heroInterval = setInterval(() => {
+                    slideHero(1);
+                }, 8000);
+            }
+        }
+
+        // Load hero slider with trending movies
+        async function loadHeroSlider() {
+            try {
+                const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/trending/movie/week?api_key=${TMDB_API_KEY}`);
+
+                // Get top 5 trending movies for hero
+                heroMovies = data.results.slice(0, 5);
+
+                // Clear hero slider
+                heroSlider.innerHTML = '';
+
+                // Add slides to hero: only load the first slide's image immediately!
                 heroMovies.forEach((movie, index) => {
-                    const thumb = document.createElement('button');
-                    thumb.type = 'button';
-                    thumb.className = `hero-thumb ${index === 0 ? 'active' : ''}`;
-                    thumb.dataset.index = index;
-                    const movieTitle = movie.title || movie.name || 'Featured';
-                    const thumbImg = movie.poster_path ? `${TMDB_IMAGE_BASE}/w185${movie.poster_path}` : POSTER_FALLBACK;
-                    thumb.innerHTML = `
-                        <img src="${thumbImg}" alt="${movieTitle}" onerror="this.onerror=null;this.src='${POSTER_FALLBACK}'">
+                    const slide = document.createElement('div');
+                    slide.className = `hero-slide ${index === 0 ? 'active' : ''}`;
+                    const backdropUrl = movie.backdrop_path
+                        ? NetStreamAPI.getBackdropUrl(movie.backdrop_path)
+                        : 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=960&q=70';
+
+                    if (index === 0) {
+                        slide.style.backgroundImage = `url('${backdropUrl}')`;
+                    } else {
+                        // Defer loading images for slides 1-4: saves ~15-20MB on cellular initial load!
+                        slide.dataset.bg = backdropUrl;
+                    }
+                    slide.dataset.movieId = movie.id;
+
+                    slide.addEventListener('click', function () {
+                        showMovieDetails(movie.id, 'movie');
+                    });
+
+                    heroSlider.appendChild(slide);
+                });
+
+                // Render bottom thumbnail switcher with clear poster thumbnails
+                const heroThumbs = document.getElementById('heroThumbs');
+                if (heroThumbs) {
+                    heroThumbs.innerHTML = '';
+                    heroMovies.forEach((movie, index) => {
+                        const thumb = document.createElement('button');
+                        thumb.type = 'button';
+                        thumb.className = `hero-thumb ${index === 0 ? 'active' : ''}`;
+                        thumb.dataset.index = index;
+                        const movieTitle = movie.title || movie.name || 'Featured';
+                        const thumbImg = movie.poster_path ? `${TMDB_IMAGE_BASE}/w185${movie.poster_path}` : POSTER_FALLBACK;
+                        thumb.innerHTML = `
+                        <img src="${thumbImg}" alt="${movieTitle}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${POSTER_FALLBACK}'">
                         <span class="hero-thumb-meta">
                             <small>0${index + 1}</small>
                             <span>${movieTitle}</span>
                         </span>
                     `;
-                    thumb.addEventListener('click', () => goToHeroSlide(index));
-                    heroThumbs.appendChild(thumb);
-                });
+                        thumb.addEventListener('click', () => goToHeroSlide(index));
+                        heroThumbs.appendChild(thumb);
+                    });
+                }
+
+                const counterEl = document.getElementById('heroSlideCounter');
+                if (counterEl && heroMovies.length > 0) {
+                    counterEl.textContent = `1 / ${heroMovies.length}`;
+                }
+
+                const prevBtn = document.getElementById('heroPrevBtn');
+                const nextBtn = document.getElementById('heroNextBtn');
+                if (prevBtn) prevBtn.onclick = () => slideHero(-1);
+                if (nextBtn) nextBtn.onclick = () => slideHero(1);
+
+                // Set first movie as hero content
+                if (heroMovies.length > 0) {
+                    updateHeroContent(heroMovies[0]);
+                    currentHeroItem = heroMovies[0];
+                    resetHeroAutoSlide();
+                }
+
+            } catch (error) {
+                console.error('Error loading hero slider:', error);
+                heroSlider.innerHTML = '<div class="hero-slide active" style="background-image: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)), url(\'https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=960&q=70\')"></div>';
             }
-            
-            const counterEl = document.getElementById('heroSlideCounter');
-            if (counterEl && heroMovies.length > 0) {
-                counterEl.textContent = `1 / ${heroMovies.length}`;
-            }
-            
-            const prevBtn = document.getElementById('heroPrevBtn');
-            const nextBtn = document.getElementById('heroNextBtn');
-            if (prevBtn) prevBtn.onclick = () => slideHero(-1);
-            if (nextBtn) nextBtn.onclick = () => slideHero(1);
-            
-            // Set first movie as hero content
-            if (heroMovies.length > 0) {
-                updateHeroContent(heroMovies[0]);
-                currentHeroItem = heroMovies[0];
-                resetHeroAutoSlide();
-            }
-            
-        } catch (error) {
-            console.error('Error loading hero slider:', error);
-            heroSlider.innerHTML = '<div class="hero-slide active" style="background-image: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)), url(\'https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1925&q=80\')"></div>';
         }
-    }
-    
-    // Update hero content with movie data + real TMDB runtime, genres, director & cast
-    async function updateHeroContent(movie) {
-        const movieTitle = movie.title || movie.name || 'Untitled';
-        const ratingInfo = formatRating(movie.vote_average, movie.vote_count);
-        heroTitle.textContent = movieTitle;
-        heroRating.textContent = ratingInfo.label;
-        const heroRatingPill = document.getElementById('heroRatingPill');
-        if (heroRatingPill) {
-            heroRatingPill.className = `rating-pill ${ratingInfo.tier}`;
-        }
-        heroYear.textContent = movie.release_date ? movie.release_date.substring(0, 4) : 'N/A';
-        heroDuration.textContent = movie.runtime ? `${movie.runtime} min` : 'Feature Film';
-        heroDescription.textContent = movie.overview
-            ? (movie.overview.length > 175 ? movie.overview.substring(0, 175) + '...' : movie.overview)
-            : 'No description available.';
-        
-        const heroCreditsEl = document.getElementById('heroCredits');
-        if (heroCreditsEl) heroCreditsEl.innerHTML = '';
-        heroGenres.innerHTML = '';
-        
-        // Set play, trailer, and info button events
-        document.getElementById('playHeroBtn').onclick = function() {
-            playMedia(movie.id, 'movie', movieTitle);
-        };
-        document.getElementById('trailerBtn').onclick = function() {
-            showTrailer(movie.id, 'movie');
-        };
-        document.getElementById('moreInfoBtn').onclick = function() {
-            showMovieDetails(movie.id, 'movie');
-        };
-        
-        // Load full details (cached) for real runtime, genres, director & cast
-        try {
-            let fullData = heroDetailsCache.get(movie.id);
-            if (!fullData) {
-                const res = await fetch(`${TMDB_BASE_URL}/movie/${movie.id}?api_key=${TMDB_API_KEY}&append_to_response=credits`);
-                fullData = await res.json();
-                heroDetailsCache.set(movie.id, fullData);
-            }
-            if (currentHeroItem && currentHeroItem.id !== movie.id) return;
-            
-            if (fullData.runtime) {
-                heroDuration.textContent = `${fullData.runtime} min`;
-            }
-            const fullRating = formatRating(fullData.vote_average, fullData.vote_count);
-            heroRating.textContent = fullRating.votes ? `${fullRating.label} (${fullRating.votes})` : fullRating.label;
+
+        // Update hero content with movie data + real TMDB runtime, genres, director & cast
+        async function updateHeroContent(movie) {
+            const movieTitle = movie.title || movie.name || 'Untitled';
+            const ratingInfo = formatRating(movie.vote_average, movie.vote_count);
+            heroTitle.textContent = movieTitle;
+            heroRating.textContent = ratingInfo.label;
+            const heroRatingPill = document.getElementById('heroRatingPill');
             if (heroRatingPill) {
-                heroRatingPill.className = `rating-pill ${fullRating.tier}`;
+                heroRatingPill.className = `rating-pill ${ratingInfo.tier}`;
             }
-            
+            heroYear.textContent = movie.release_date ? movie.release_date.substring(0, 4) : 'N/A';
+            heroDuration.textContent = movie.runtime ? `${movie.runtime} min` : 'Feature Film';
+            heroDescription.textContent = movie.overview
+                ? (movie.overview.length > 175 ? movie.overview.substring(0, 175) + '...' : movie.overview)
+                : 'No description available.';
+
+            const heroCreditsEl = document.getElementById('heroCredits');
+            if (heroCreditsEl) heroCreditsEl.innerHTML = '';
             heroGenres.innerHTML = '';
-            if (Array.isArray(fullData.genres)) {
-                fullData.genres.slice(0, 4).forEach(genre => {
-                    const genreTag = document.createElement('span');
-                    genreTag.className = 'genre-tag';
-                    genreTag.textContent = genre.name;
-                    heroGenres.appendChild(genreTag);
-                });
-            }
-            
-            if (heroCreditsEl) {
-                const director = getDirectorOrCreator(fullData, 'movie');
-                const castNames = getCastList(fullData, 4).map(a => a.name).join(', ');
-                let creditsHTML = '';
-                if (director) creditsHTML += `<div><strong>Director:</strong> ${director}</div>`;
-                if (castNames) creditsHTML += `<div><strong>Starring:</strong> ${castNames}</div>`;
-                heroCreditsEl.innerHTML = creditsHTML;
-            }
-        } catch (e) {
-            // Keep basic hero metadata on error
-        }
-    }
-    
-    function goToHeroSlide(targetIndex) {
-        const slides = Array.from(document.querySelectorAll('.hero-slide'));
-        if (slides.length === 0) return;
-        const safeIndex = ((targetIndex % slides.length) + slides.length) % slides.length;
-        
-        slides.forEach((s, i) => s.classList.toggle('active', i === safeIndex));
-        const thumbs = Array.from(document.querySelectorAll('.hero-thumb'));
-        thumbs.forEach((t, i) => t.classList.toggle('active', i === safeIndex));
-        
-        const counterEl = document.getElementById('heroSlideCounter');
-        if (counterEl) {
-            counterEl.textContent = `${safeIndex + 1} / ${slides.length}`;
-        }
-        
-        // Scroll active thumbnail horizontally into view inside hero-thumbs without scrolling page
-        const thumbsContainer = document.getElementById('heroThumbs');
-        const activeThumb = thumbs[safeIndex];
-        if (thumbsContainer && activeThumb) {
-            const targetLeft = activeThumb.offsetLeft - (thumbsContainer.clientWidth / 2) + (activeThumb.clientWidth / 2);
-            thumbsContainer.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' });
-        }
-        
-        resetHeroAutoSlide();
-        
-        const movieId = parseInt(slides[safeIndex].dataset.movieId, 10);
-        const movie = heroMovies.find(m => m.id === movieId) || trendingMovies.find(m => m.id === movieId);
-        if (movie) {
-            currentHeroItem = movie;
-            updateHeroContent(movie);
-        }
-    }
-    
-    // Slide hero to next or previous slide
-    function slideHero(step = 1) {
-        const slides = Array.from(document.querySelectorAll('.hero-slide'));
-        if (slides.length === 0) return;
-        const currentIndex = Math.max(0, slides.findIndex(s => s.classList.contains('active')));
-        goToHeroSlide(currentIndex + step);
-    }
-    
-    // Load trending movies for the top 10 section
-    async function loadTrendingMovies() {
-        try {
-            const response = await fetch(`${TMDB_BASE_URL}/trending/movie/day?api_key=${TMDB_API_KEY}`);
-            const data = await response.json();
-            
-            // Store trending movies
-            trendingMovies = data.results.slice(0, 10);
-            
-            // Clear trending slider
-            trendingSlider.innerHTML = '';
-            
-            // Add trending movies to slider
-            trendingMovies.forEach((movie, index) => {
-                const movieCard = createMovieCard(movie, index + 1);
-                trendingSlider.appendChild(movieCard);
-            });
-            
-        } catch (error) {
-            console.error('Error loading trending movies:', error);
-            trendingSlider.innerHTML = '<p class="error-msg">Failed to load trending movies. Please try again later.</p>';
-        }
-    }
-    
-    // Load top rated movies
-    async function loadTopRatedMovies() {
-        try {
-            const response = await fetch(`${TMDB_BASE_URL}/movie/top_rated?api_key=${TMDB_API_KEY}`);
-            const data = await response.json();
-            
-            // Store top rated movies
-            topRatedMovies = data.results.slice(0, 12);
-            
-            // Clear top rated grid
-            topRatedMoviesGrid.innerHTML = '';
-            
-            // Add top rated movies to grid
-            topRatedMovies.forEach(movie => {
-                const movieCard = createMovieCard(movie);
-                topRatedMoviesGrid.appendChild(movieCard);
-            });
-            
-        } catch (error) {
-            console.error('Error loading top rated movies:', error);
-            topRatedMoviesGrid.innerHTML = '<p class="error-msg">Failed to load top rated movies. Please try again later.</p>';
-        }
-    }
-    
-    // Load Indian OTT releases
-    async function loadIndianMovies() {
-        try {
-            // Search for Indian movies
-            const response = await fetch(`${TMDB_BASE_URL}/discover/movie?api_key=${TMDB_API_KEY}&with_original_language=hi&sort_by=release_date.desc&page=1`);
-            const data = await response.json();
-            
-            // Store Indian movies
-            indianMovies = data.results.slice(0, 10);
-            
-            // Clear OTT slider
-            ottSlider.innerHTML = '';
-            
-            // Add Indian movies to slider
-            indianMovies.forEach(movie => {
-                const movieCard = createMovieCard(movie);
-                ottSlider.appendChild(movieCard);
-            });
-            
-        } catch (error) {
-            console.error('Error loading Indian movies:', error);
-            ottSlider.innerHTML = '<p class="error-msg">Failed to load Indian OTT releases. Please try again later.</p>';
-        }
-    }
-    
-    // Load recommended movies
-    async function loadRecommendedMovies() {
-        try {
-            // Get popular movies as recommendations
-            const response = await fetch(`${TMDB_BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}&page=2`);
-            const data = await response.json();
-            
-            // Store recommended movies
-            recommendedMovies = data.results.slice(0, 6);
-            
-            // Clear recommended grid
-            recommendedGrid.innerHTML = '';
-            
-            // Add recommended movies to grid
-            recommendedMovies.forEach(movie => {
-                const movieCard = createMovieCard(movie);
-                recommendedGrid.appendChild(movieCard);
-            });
-            
-        } catch (error) {
-            console.error('Error loading recommended movies:', error);
-            recommendedGrid.innerHTML = '<p class="error-msg">Failed to load recommendations. Please try again later.</p>';
-        }
-    }
-    
-    // Create movie card element
-    function createMovieCard(movie, rank = null) {
-        const card = document.createElement('div');
-        card.className = 'movie-card';
-        card.dataset.id = movie.id;
-        card.dataset.type = 'movie';
-        
-        // Add rank badge if provided
-        let rankBadge = '';
-        if (rank) {
-            rankBadge = `<div class="rank-badge">${rank}</div>`;
-        }
-        
-        // Check for watch progress
-        let progressBar = '';
-        const savedProgress = localStorage.getItem(`netstream_progress_movie_${movie.id}`);
-        if (savedProgress) {
+
+            // Set play, trailer, and info button events
+            document.getElementById('playHeroBtn').onclick = function () {
+                playMedia(movie.id, 'movie', movieTitle);
+            };
+            document.getElementById('trailerBtn').onclick = function () {
+                showTrailer(movie.id, 'movie');
+            };
+            document.getElementById('moreInfoBtn').onclick = function () {
+                showMovieDetails(movie.id, 'movie');
+            };
+
+            // Load full details (cached) for real runtime, genres, director & cast
             try {
-                const progress = JSON.parse(savedProgress);
-                const progressPercent = progress.duration ? (progress.currentTime / progress.duration) * 100 : (progress.progress || 0);
-                if (progressPercent > 5 && progressPercent < 95) {
-                    progressBar = `<div class="progress-bar" style="width: ${progressPercent}%"></div>`;
+                let fullData = heroDetailsCache.get(movie.id);
+                if (!fullData) {
+                    fullData = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/movie/${movie.id}?api_key=${TMDB_API_KEY}&append_to_response=credits`);
+                    heroDetailsCache.set(movie.id, fullData);
+                }
+                if (currentHeroItem && currentHeroItem.id !== movie.id) return;
+
+                if (fullData.runtime) {
+                    heroDuration.textContent = `${fullData.runtime} min`;
+                }
+                const fullRating = formatRating(fullData.vote_average, fullData.vote_count);
+                heroRating.textContent = fullRating.votes ? `${fullRating.label} (${fullRating.votes})` : fullRating.label;
+                if (heroRatingPill) {
+                    heroRatingPill.className = `rating-pill ${fullRating.tier}`;
+                }
+
+                heroGenres.innerHTML = '';
+                if (Array.isArray(fullData.genres)) {
+                    fullData.genres.slice(0, 4).forEach(genre => {
+                        const genreTag = document.createElement('span');
+                        genreTag.className = 'genre-tag';
+                        genreTag.textContent = genre.name;
+                        heroGenres.appendChild(genreTag);
+                    });
+                }
+
+                if (heroCreditsEl) {
+                    const director = getDirectorOrCreator(fullData, 'movie');
+                    const castNames = getCastList(fullData, 4).map(a => a.name).join(', ');
+                    let creditsHTML = '';
+                    if (director) creditsHTML += `<div><strong>Director:</strong> ${director}</div>`;
+                    if (castNames) creditsHTML += `<div><strong>Starring:</strong> ${castNames}</div>`;
+                    heroCreditsEl.innerHTML = creditsHTML;
                 }
             } catch (e) {
-                // Invalid progress data
+                // Keep basic hero metadata on error
             }
         }
-        
-        const ratingInfo = formatRating(movie.vote_average, movie.vote_count);
-        const posterUrl = movie.poster_path ? `${TMDB_IMAGE_BASE}/w342${movie.poster_path}` : POSTER_FALLBACK;
-        
-        card.innerHTML = `
+
+        function goToHeroSlide(targetIndex) {
+            const slides = Array.from(document.querySelectorAll('.hero-slide'));
+            if (slides.length === 0) return;
+            const safeIndex = ((targetIndex % slides.length) + slides.length) % slides.length;
+
+            slides.forEach((s, i) => s.classList.toggle('active', i === safeIndex));
+            const thumbs = Array.from(document.querySelectorAll('.hero-thumb'));
+            thumbs.forEach((t, i) => t.classList.toggle('active', i === safeIndex));
+
+            // Ensure background image is loaded for this slide if it was deferred
+            const activeSlide = slides[safeIndex];
+            if (activeSlide && activeSlide.dataset.bg) {
+                activeSlide.style.backgroundImage = `url('${activeSlide.dataset.bg}')`;
+                delete activeSlide.dataset.bg;
+            }
+
+            const counterEl = document.getElementById('heroSlideCounter');
+            if (counterEl) {
+                counterEl.textContent = `${safeIndex + 1} / ${slides.length}`;
+            }
+
+            // Scroll active thumbnail horizontally into view inside hero-thumbs without scrolling page
+            const thumbsContainer = document.getElementById('heroThumbs');
+            const activeThumb = thumbs[safeIndex];
+            if (thumbsContainer && activeThumb) {
+                const targetLeft = activeThumb.offsetLeft - (thumbsContainer.clientWidth / 2) + (activeThumb.clientWidth / 2);
+                thumbsContainer.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' });
+            }
+
+            resetHeroAutoSlide();
+
+            const movieId = parseInt(slides[safeIndex].dataset.movieId, 10);
+            const movie = heroMovies.find(m => m.id === movieId) || trendingMovies.find(m => m.id === movieId);
+            if (movie) {
+                currentHeroItem = movie;
+                updateHeroContent(movie);
+            }
+        }
+
+        // Slide hero to next or previous slide
+        function slideHero(step = 1) {
+            const slides = Array.from(document.querySelectorAll('.hero-slide'));
+            if (slides.length === 0) return;
+            const currentIndex = Math.max(0, slides.findIndex(s => s.classList.contains('active')));
+            goToHeroSlide(currentIndex + step);
+        }
+
+        // Load trending movies for the top 10 section
+        async function loadTrendingMovies() {
+            try {
+                const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/trending/movie/day?api_key=${TMDB_API_KEY}`);
+
+                // Store trending movies
+                trendingMovies = data.results.slice(0, 10);
+
+                // Clear trending slider
+                trendingSlider.innerHTML = '';
+
+                // Add trending movies to slider
+                trendingMovies.forEach((movie, index) => {
+                    const movieCard = createMovieCard(movie, index + 1);
+                    trendingSlider.appendChild(movieCard);
+                });
+
+            } catch (error) {
+                console.error('Error loading trending movies:', error);
+                trendingSlider.innerHTML = '<p class="error-msg">Failed to load trending movies. Please try again later.</p>';
+            }
+        }
+
+        // Load top rated movies
+        async function loadTopRatedMovies() {
+            try {
+                const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/movie/top_rated?api_key=${TMDB_API_KEY}`);
+
+                // Store top rated movies
+                topRatedMovies = data.results.slice(0, 12);
+
+                // Clear top rated grid
+                topRatedMoviesGrid.innerHTML = '';
+
+                // Add top rated movies to grid
+                topRatedMovies.forEach(movie => {
+                    const movieCard = createMovieCard(movie);
+                    topRatedMoviesGrid.appendChild(movieCard);
+                });
+
+            } catch (error) {
+                console.error('Error loading top rated movies:', error);
+                topRatedMoviesGrid.innerHTML = '<p class="error-msg">Failed to load top rated movies. Please try again later.</p>';
+            }
+        }
+
+        // Load Indian OTT releases
+        async function loadIndianMovies() {
+            try {
+                // Search for Indian movies
+                const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/discover/movie?api_key=${TMDB_API_KEY}&with_original_language=hi&sort_by=release_date.desc&page=1`);
+
+                // Store Indian movies
+                indianMovies = data.results.slice(0, 10);
+
+                // Clear OTT slider
+                ottSlider.innerHTML = '';
+
+                // Add Indian movies to slider
+                indianMovies.forEach(movie => {
+                    const movieCard = createMovieCard(movie);
+                    ottSlider.appendChild(movieCard);
+                });
+
+            } catch (error) {
+                console.error('Error loading Indian movies:', error);
+                ottSlider.innerHTML = '<p class="error-msg">Failed to load Indian OTT releases. Please try again later.</p>';
+            }
+        }
+
+        // Load recommended movies
+        async function loadRecommendedMovies() {
+            try {
+                // Get popular movies as recommendations
+                const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}&page=2`);
+
+                // Store recommended movies
+                recommendedMovies = data.results.slice(0, 6);
+
+                // Clear recommended grid
+                recommendedGrid.innerHTML = '';
+
+                // Add recommended movies to grid
+                recommendedMovies.forEach(movie => {
+                    const movieCard = createMovieCard(movie);
+                    recommendedGrid.appendChild(movieCard);
+                });
+
+            } catch (error) {
+                console.error('Error loading recommended movies:', error);
+                recommendedGrid.innerHTML = '<p class="error-msg">Failed to load recommendations. Please try again later.</p>';
+            }
+        }
+
+        // Create movie card element
+        function createMovieCard(movie, rank = null) {
+            const card = document.createElement('div');
+            card.className = 'movie-card';
+            card.dataset.id = movie.id;
+            card.dataset.type = 'movie';
+
+            // Add rank badge if provided
+            let rankBadge = '';
+            if (rank) {
+                rankBadge = `<div class="rank-badge">${rank}</div>`;
+            }
+
+            // Check for watch progress
+            let progressBar = '';
+            const savedProgress = localStorage.getItem(`netstream_progress_movie_${movie.id}`);
+            if (savedProgress) {
+                try {
+                    const progress = JSON.parse(savedProgress);
+                    const progressPercent = progress.duration ? (progress.currentTime / progress.duration) * 100 : (progress.progress || 0);
+                    if (progressPercent > 5 && progressPercent < 95) {
+                        progressBar = `<div class="progress-bar" style="width: ${progressPercent}%"></div>`;
+                    }
+                } catch (e) {
+                    // Invalid progress data
+                }
+            }
+
+            const ratingInfo = formatRating(movie.vote_average, movie.vote_count);
+            const posterUrl = window.NetStreamAPI ? NetStreamAPI.getPosterUrl(movie.poster_path) : (movie.poster_path ? `${TMDB_IMAGE_BASE}/w185${movie.poster_path}` : POSTER_FALLBACK);
+
+            card.innerHTML = `
             ${rankBadge}
             <div class="movie-poster">
                 <span class="rating-pill rating-badge-overlay ${ratingInfo.tier}"><i class="fas fa-star"></i> ${ratingInfo.text}</span>
-                <img src="${posterUrl}" alt="${movie.title}" loading="lazy" onerror="this.onerror=null;this.src='${POSTER_FALLBACK}'">
+                <img src="${posterUrl}" alt="${movie.title}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${POSTER_FALLBACK}'">
                 <div class="movie-overlay">
                     <button class="btn-play" data-id="${movie.id}" data-type="movie" aria-label="Play ${movie.title}">
                         <i class="fas fa-play"></i>
@@ -978,74 +1026,73 @@
                 </div>
             </div>
         `;
-        
-        // Add event listeners
-        const playBtn = card.querySelector('.btn-play');
-        const infoBtn = card.querySelector('.btn-info-sm');
-        
-        playBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const id = this.dataset.id;
-            const type = this.dataset.type;
-            playMedia(id, type, movie.title);
-        });
-        
-        infoBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const id = this.dataset.id;
-            const type = this.dataset.type;
-            showMovieDetails(id, type);
-        });
-        
-        card.addEventListener('click', function() {
-            const id = this.dataset.id;
-            const type = this.dataset.type;
-            showMovieDetails(id, type);
-        });
-        
-        return card;
-    }
-    
-    // Search for movies/TV shows
-    async function performSearch() {
-        const query = searchInput.value.trim();
-        if (!query) return;
-        
-        try {
-            // Redirect to movies page with search query
-            window.location.href = `movies.html?search=${encodeURIComponent(query)}`;
-        } catch (error) {
-            console.error('Error performing search:', error);
+
+            // Add event listeners
+            const playBtn = card.querySelector('.btn-play');
+            const infoBtn = card.querySelector('.btn-info-sm');
+
+            playBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const id = this.dataset.id;
+                const type = this.dataset.type;
+                playMedia(id, type, movie.title);
+            });
+
+            infoBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const id = this.dataset.id;
+                const type = this.dataset.type;
+                showMovieDetails(id, type);
+            });
+
+            card.addEventListener('click', function () {
+                const id = this.dataset.id;
+                const type = this.dataset.type;
+                showMovieDetails(id, type);
+            });
+
+            return card;
         }
-    }
-    
-    // Show search suggestions
-    async function searchSuggestions(query) {
-        try {
-            const response = await fetch(`${TMDB_BASE_URL}/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=1`);
-            const data = await response.json();
-            
-            // Clear previous results
-            searchResults.innerHTML = '';
-            
-            if (data.results.length === 0) {
-                searchResults.innerHTML = '<div class="search-result-item">No results found</div>';
-                searchResults.style.display = 'block';
-                return;
+
+        // Search for movies/TV shows
+        async function performSearch() {
+            const query = searchInput.value.trim();
+            if (!query) return;
+
+            try {
+                // Redirect to movies page with search query
+                window.location.href = `movies.html?search=${encodeURIComponent(query)}`;
+            } catch (error) {
+                console.error('Error performing search:', error);
             }
-            
-            // Add search results
-            data.results.slice(0, 6).forEach(item => {
-                if (item.media_type !== 'movie' && item.media_type !== 'tv') return;
-                const resultItem = document.createElement('div');
-                resultItem.className = 'search-result-item';
-                
-                const title = item.title || item.name;
-                const type = item.media_type === 'movie' ? 'Movie' : 'TV Show';
-                const year = item.release_date ? item.release_date.substring(0, 4) : item.first_air_date ? item.first_air_date.substring(0, 4) : 'N/A';
-                const ratingInfo = formatRating(item.vote_average, item.vote_count);
-                
-                resultItem.innerHTML = `
+        }
+
+        // Show search suggestions
+        async function searchSuggestions(query) {
+            try {
+                const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=1`, { ttl: 5 * 60 * 1000 });
+
+                // Clear previous results
+                searchResults.innerHTML = '';
+
+                if (data.results.length === 0) {
+                    searchResults.innerHTML = '<div class="search-result-item">No results found</div>';
+                    searchResults.style.display = 'block';
+                    return;
+                }
+
+                // Add search results
+                data.results.slice(0, 6).forEach(item => {
+                    if (item.media_type !== 'movie' && item.media_type !== 'tv') return;
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'search-result-item';
+
+                    const title = item.title || item.name;
+                    const type = item.media_type === 'movie' ? 'Movie' : 'TV Show';
+                    const year = item.release_date ? item.release_date.substring(0, 4) : item.first_air_date ? item.first_air_date.substring(0, 4) : 'N/A';
+                    const ratingInfo = formatRating(item.vote_average, item.vote_count);
+
+                    resultItem.innerHTML = `
                     <img src="${item.poster_path ? `${TMDB_IMAGE_BASE}/w92${item.poster_path}` : POSTER_FALLBACK}" alt="${title}">
                     <div class="search-result-info">
                         <h4>${title}</h4>
@@ -1055,67 +1102,66 @@
                         </p>
                     </div>
                 `;
-                
-                resultItem.addEventListener('click', function() {
-                    if (item.media_type === 'movie') {
-                        showMovieDetails(item.id, 'movie');
-                    } else {
-                        showMovieDetails(item.id, 'tv');
-                    }
-                    searchInput.value = '';
-                    searchResults.innerHTML = '';
-                    searchResults.style.display = 'none';
+
+                    resultItem.addEventListener('click', function () {
+                        if (item.media_type === 'movie') {
+                            showMovieDetails(item.id, 'movie');
+                        } else {
+                            showMovieDetails(item.id, 'tv');
+                        }
+                        searchInput.value = '';
+                        searchResults.innerHTML = '';
+                        searchResults.style.display = 'none';
+                    });
+
+                    searchResults.appendChild(resultItem);
                 });
-                
-                searchResults.appendChild(resultItem);
-            });
-            
-            searchResults.style.display = 'block';
-            
-        } catch (error) {
-            console.error('Error fetching search suggestions:', error);
+
+                searchResults.style.display = 'block';
+
+            } catch (error) {
+                console.error('Error fetching search suggestions:', error);
+            }
         }
-    }
-    
-    // Show movie/TV show details modal
-    async function showMovieDetails(id, type) {
-        try {
-            // Show loading in modal
-            document.getElementById('movieDetail').innerHTML = `
+
+        // Show movie/TV show details modal
+        async function showMovieDetails(id, type) {
+            try {
+                // Show loading in modal
+                document.getElementById('movieDetail').innerHTML = `
                 <div class="loading-detail">
                     <div class="spinner"></div>
                     <p>Loading details...</p>
                 </div>
             `;
-            
-            // Close any open modals first
-            closeAllModals();
-            
-            // Open movie modal
-            openModal(movieModal);
-            
-            // Fetch movie/TV details (include aggregate_credits for full TV cast)
-            const endpoint = type === 'movie' ? 'movie' : 'tv';
-            const append = type === 'tv' ? 'credits,aggregate_credits,videos' : 'credits,videos';
-            const response = await fetch(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=${append}`);
-            const data = await response.json();
-            
-            const title = data.title || data.name || 'Untitled';
-            const year = data.release_date ? data.release_date.substring(0, 4) : data.first_air_date ? data.first_air_date.substring(0, 4) : 'N/A';
-            const ratingInfo = formatRating(data.vote_average, data.vote_count);
-            const director = getDirectorOrCreator(data, type);
-            const castList = getCastList(data, 12);
-            const backdropUrl = data.backdrop_path ? `${TMDB_IMAGE_BASE}/w1280${data.backdrop_path}` : '';
-            const posterUrl = data.poster_path ? `${TMDB_IMAGE_BASE}/w500${data.poster_path}` : POSTER_FALLBACK;
-            const runtimeText = type === 'movie'
-                ? (data.runtime ? `${data.runtime} min` : 'N/A')
-                : (data.episode_run_time && data.episode_run_time.length > 0 ? `${data.episode_run_time[0]} min/ep` : 'N/A');
-            
-            // Update modal title
-            document.getElementById('modalTitle').textContent = title;
-            
-            // Create detail HTML
-            const detailHTML = `
+
+                // Close any open modals first
+                closeAllModals();
+
+                // Open movie modal
+                openModal(movieModal);
+
+                // Fetch movie/TV details (include aggregate_credits for full TV cast)
+                const endpoint = type === 'movie' ? 'movie' : 'tv';
+                const append = type === 'tv' ? 'credits,aggregate_credits,videos' : 'credits,videos';
+                const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=${append}`);
+
+                const title = data.title || data.name || 'Untitled';
+                const year = data.release_date ? data.release_date.substring(0, 4) : data.first_air_date ? data.first_air_date.substring(0, 4) : 'N/A';
+                const ratingInfo = formatRating(data.vote_average, data.vote_count);
+                const director = getDirectorOrCreator(data, type);
+                const castList = getCastList(data, 12);
+                const backdropUrl = data.backdrop_path ? `${TMDB_IMAGE_BASE}/w1280${data.backdrop_path}` : '';
+                const posterUrl = data.poster_path ? `${TMDB_IMAGE_BASE}/w500${data.poster_path}` : POSTER_FALLBACK;
+                const runtimeText = type === 'movie'
+                    ? (data.runtime ? `${data.runtime} min` : 'N/A')
+                    : (data.episode_run_time && data.episode_run_time.length > 0 ? `${data.episode_run_time[0]} min/ep` : 'N/A');
+
+                // Update modal title
+                document.getElementById('modalTitle').textContent = title;
+
+                // Create detail HTML
+                const detailHTML = `
                 <div class="detail-backdrop-banner" ${backdropUrl ? `style="background-image: url('${backdropUrl}')"` : ''}>
                     <div class="detail-header">
                         <div class="detail-poster">
@@ -1154,10 +1200,10 @@
                             ${castList.map(actor => `
                                 <div class="cast-card">
                                     <div class="cast-img">
-                                        ${actor.profile_path ? 
-                                            `<img src="${TMDB_IMAGE_BASE}/w185${actor.profile_path}" alt="${actor.name}" loading="lazy">` : 
-                                            `<div class="no-img"><i class="fas fa-user"></i></div>`
-                                        }
+                                        ${actor.profile_path ?
+                        `<img src="${TMDB_IMAGE_BASE}/w185${actor.profile_path}" alt="${actor.name}" loading="lazy">` :
+                        `<div class="no-img"><i class="fas fa-user"></i></div>`
+                    }
                                     </div>
                                     <div class="cast-info">
                                         <h5>${actor.name}</h5>
@@ -1169,165 +1215,162 @@
                     ` : '<p class="no-cast">No cast information available for this title.</p>'}
                 </div>
             `;
-            
-            document.getElementById('movieDetail').innerHTML = detailHTML;
-            
-            // Add event listeners to buttons in modal
-            document.getElementById('playDetailBtn').addEventListener('click', function() {
-                playMedia(id, type, data.title || data.name);
-                closeModal(movieModal);
-            });
-            
-            document.getElementById('trailerDetailBtn').addEventListener('click', function() {
-                showTrailer(id, type);
-            });
-            
-        } catch (error) {
-            console.error('Error loading movie details:', error);
-            document.getElementById('movieDetail').innerHTML = `
+
+                document.getElementById('movieDetail').innerHTML = detailHTML;
+
+                // Add event listeners to buttons in modal
+                document.getElementById('playDetailBtn').addEventListener('click', function () {
+                    playMedia(id, type, data.title || data.name);
+                    closeModal(movieModal);
+                });
+
+                document.getElementById('trailerDetailBtn').addEventListener('click', function () {
+                    showTrailer(id, type);
+                });
+
+            } catch (error) {
+                console.error('Error loading movie details:', error);
+                document.getElementById('movieDetail').innerHTML = `
                 <div class="error-detail">
                     <i class="fas fa-exclamation-triangle"></i>
                     <p>Failed to load details. Please try again later.</p>
                 </div>
             `;
+            }
         }
-    }
-    
-    // Score and select the best official YouTube trailer
-    function selectBestOfficialTrailer(videos, preferredLanguage = 'en') {
-        if (!Array.isArray(videos) || videos.length === 0) return null;
-        
-        const candidates = videos.filter(video => {
-            if (!video || video.site !== 'YouTube' || !video.key) return false;
-            if (video.type !== 'Trailer' && video.type !== 'Teaser') return false;
-            const name = video.name || '';
-            if (video.official === false && /\b(fan\s*made|concept|parody|spoof|reaction|review|breakdown|explained)\b/i.test(name)) {
-                return false;
-            }
-            return true;
-        });
-        
-        if (candidates.length === 0) return null;
-        
-        const scoreVideo = (video) => {
-            let score = 0;
-            const name = video.name || '';
-            
-            if (video.official === true) score += 2000;
-            if (video.type === 'Trailer') score += 1000;
-            else if (video.type === 'Teaser') score += 300;
-            
-            if (video.iso_639_1 === 'en') score += 200;
-            else if (preferredLanguage && video.iso_639_1 === preferredLanguage) score += 180;
-            
-            if (/\bofficial\s*(final\s*)?(main\s*|theatrical\s*)?trailer\b/i.test(name)) score += 150;
-            else if (/\b(main|final|theatrical)\s*trailer\b/i.test(name)) score += 100;
-            else if (/\btrailer\b/i.test(name)) score += 50;
-            
-            if (/\b(tv\s*spot|clip|featurette|behind\s*the\s*scenes|interview|sneak\s*peek)\b/i.test(name)) {
-                score -= 400;
-            }
-            
-            score += (Number(video.size) || 0) / 100;
-            score += (Date.parse(video.published_at) || 0) / 1e13;
-            return score;
-        };
-        
-        candidates.sort((a, b) => scoreVideo(b) - scoreVideo(a));
-        return candidates[0];
-    }
-    
-    // Fetch official trailer from TMDB (English first, then original language fallback)
-    async function fetchOfficialTrailer(id, type) {
-        const endpoint = type === 'movie' ? 'movie' : 'tv';
-        const detailRes = await fetch(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=videos`);
-        const detailData = await detailRes.json();
-        
-        const originalLang = detailData.original_language || 'en';
-        const candidates = Array.isArray(detailData.videos && detailData.videos.results)
-            ? [...detailData.videos.results]
-            : [];
-        
-        const hasOfficialEnTrailer = candidates.some(v =>
-            v && v.site === 'YouTube' && v.key && v.type === 'Trailer' && v.official === true && v.iso_639_1 === 'en'
-        );
-        
-        if (!hasOfficialEnTrailer && originalLang !== 'en') {
-            try {
-                const origRes = await fetch(`${TMDB_BASE_URL}/${endpoint}/${id}/videos?api_key=${TMDB_API_KEY}&language=${encodeURIComponent(originalLang)}`);
-                const origData = await origRes.json();
-                if (Array.isArray(origData.results)) {
-                    const seenKeys = new Set(candidates.map(v => v.key));
-                    origData.results.forEach(v => {
-                        if (v && v.key && !seenKeys.has(v.key)) {
-                            candidates.push(v);
-                            seenKeys.add(v.key);
-                        }
-                    });
+
+        // Score and select the best official YouTube trailer
+        function selectBestOfficialTrailer(videos, preferredLanguage = 'en') {
+            if (!Array.isArray(videos) || videos.length === 0) return null;
+
+            const candidates = videos.filter(video => {
+                if (!video || video.site !== 'YouTube' || !video.key) return false;
+                if (video.type !== 'Trailer' && video.type !== 'Teaser') return false;
+                const name = video.name || '';
+                if (video.official === false && /\b(fan\s*made|concept|parody|spoof|reaction|review|breakdown|explained)\b/i.test(name)) {
+                    return false;
                 }
-            } catch (e) {
-                // Keep default candidates if original-language lookup fails
-            }
-        }
-        
-        if (candidates.length === 0) {
-            try {
-                const fallbackRes = await fetch(`${TMDB_BASE_URL}/${endpoint}/${id}/videos?api_key=${TMDB_API_KEY}&include_video_language=en,${encodeURIComponent(originalLang)},null`);
-                const fallbackData = await fallbackRes.json();
-                if (Array.isArray(fallbackData.results)) {
-                    candidates.push(...fallbackData.results);
+                return true;
+            });
+
+            if (candidates.length === 0) return null;
+
+            const scoreVideo = (video) => {
+                let score = 0;
+                const name = video.name || '';
+
+                if (video.official === true) score += 2000;
+                if (video.type === 'Trailer') score += 1000;
+                else if (video.type === 'Teaser') score += 300;
+
+                if (video.iso_639_1 === 'en') score += 200;
+                else if (preferredLanguage && video.iso_639_1 === preferredLanguage) score += 180;
+
+                if (/\bofficial\s*(final\s*)?(main\s*|theatrical\s*)?trailer\b/i.test(name)) score += 150;
+                else if (/\b(main|final|theatrical)\s*trailer\b/i.test(name)) score += 100;
+                else if (/\btrailer\b/i.test(name)) score += 50;
+
+                if (/\b(tv\s*spot|clip|featurette|behind\s*the\s*scenes|interview|sneak\s*peek)\b/i.test(name)) {
+                    score -= 400;
                 }
-            } catch (e) {
-                // Ignore fallback failure
-            }
+
+                score += (Number(video.size) || 0) / 100;
+                score += (Date.parse(video.published_at) || 0) / 1e13;
+                return score;
+            };
+
+            candidates.sort((a, b) => scoreVideo(b) - scoreVideo(a));
+            return candidates[0];
         }
-        
-        return {
-            title: detailData.title || detailData.name || '',
-            trailer: selectBestOfficialTrailer(candidates, originalLang)
-        };
-    }
-    
-    // Show trailer modal
-    async function showTrailer(id, type) {
-        const requestId = ++latestTrailerRequestId;
-        
-        try {
-            // Stop any current media players
-            stopAllMediaPlayers();
-            
-            const trailerTitleEl = trailerModal.querySelector('.modal-header h3');
-            if (trailerTitleEl) {
-                trailerTitleEl.textContent = 'Official Trailer';
+
+        // Fetch official trailer from TMDB (English first, then original language fallback)
+        async function fetchOfficialTrailer(id, type) {
+            const endpoint = type === 'movie' ? 'movie' : 'tv';
+            const detailData = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=videos`);
+
+            const originalLang = detailData.original_language || 'en';
+            const candidates = Array.isArray(detailData.videos && detailData.videos.results)
+                ? [...detailData.videos.results]
+                : [];
+
+            const hasOfficialEnTrailer = candidates.some(v =>
+                v && v.site === 'YouTube' && v.key && v.type === 'Trailer' && v.official === true && v.iso_639_1 === 'en'
+            );
+
+            if (!hasOfficialEnTrailer && originalLang !== 'en') {
+                try {
+                    const origData = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/${endpoint}/${id}/videos?api_key=${TMDB_API_KEY}&language=${encodeURIComponent(originalLang)}`);
+                    if (Array.isArray(origData.results)) {
+                        const seenKeys = new Set(candidates.map(v => v.key));
+                        origData.results.forEach(v => {
+                            if (v && v.key && !seenKeys.has(v.key)) {
+                                candidates.push(v);
+                                seenKeys.add(v.key);
+                            }
+                        });
+                    }
+                } catch (e) {
+                    // Keep default candidates if original-language lookup fails
+                }
             }
-            
-            // Show loading in trailer modal
-            document.getElementById('trailerPlayer').innerHTML = `
+
+            if (candidates.length === 0) {
+                try {
+                    const fallbackData = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/${endpoint}/${id}/videos?api_key=${TMDB_API_KEY}&include_video_language=en,${encodeURIComponent(originalLang)},null`);
+                    if (Array.isArray(fallbackData.results)) {
+                        candidates.push(...fallbackData.results);
+                    }
+                } catch (e) {
+                    // Ignore fallback failure
+                }
+            }
+
+            return {
+                title: detailData.title || detailData.name || '',
+                trailer: selectBestOfficialTrailer(candidates, originalLang)
+            };
+        }
+
+        // Show trailer modal
+        async function showTrailer(id, type) {
+            const requestId = ++latestTrailerRequestId;
+
+            try {
+                // Stop any current media players
+                stopAllMediaPlayers();
+
+                const trailerTitleEl = trailerModal.querySelector('.modal-header h3');
+                if (trailerTitleEl) {
+                    trailerTitleEl.textContent = 'Official Trailer';
+                }
+
+                // Show loading in trailer modal
+                document.getElementById('trailerPlayer').innerHTML = `
                 <div class="loading-trailer">
                     <div class="spinner"></div>
                     <p>Loading official trailer...</p>
                 </div>
             `;
-            
-            // Only close playerModal if open; keep movieModal intact underneath so Back returns to details
-            if (playerModal.classList.contains('active')) {
-                closeModal(playerModal);
-            }
-            
-            // Open trailer modal
-            openModal(trailerModal);
-            
-            // Fetch and select official trailer
-            const { title, trailer } = await fetchOfficialTrailer(id, type);
-            if (requestId !== latestTrailerRequestId || !trailerModal.classList.contains('active')) return;
-            
-            if (trailer) {
-                if (trailerTitleEl) {
-                    const label = trailer.name || 'Official Trailer';
-                    trailerTitleEl.textContent = title ? `${title} — ${label}` : label;
+
+                // Only close playerModal if open; keep movieModal intact underneath so Back returns to details
+                if (playerModal.classList.contains('active')) {
+                    closeModal(playerModal);
                 }
-                
-                document.getElementById('trailerPlayer').innerHTML = `
+
+                // Open trailer modal
+                openModal(trailerModal);
+
+                // Fetch and select official trailer
+                const { title, trailer } = await fetchOfficialTrailer(id, type);
+                if (requestId !== latestTrailerRequestId || !trailerModal.classList.contains('active')) return;
+
+                if (trailer) {
+                    if (trailerTitleEl) {
+                        const label = trailer.name || 'Official Trailer';
+                        trailerTitleEl.textContent = title ? `${title} — ${label}` : label;
+                    }
+
+                    document.getElementById('trailerPlayer').innerHTML = `
                     <iframe 
                         id="youtubeTrailer"
                         width="100%" 
@@ -1341,98 +1384,97 @@
                         mozallowfullscreen="true">
                     </iframe>
                 `;
-                
-                currentYouTubePlayer = trailer.key;
-            } else {
-                if (trailerTitleEl && title) {
-                    trailerTitleEl.textContent = `${title} — Trailer`;
-                }
-                document.getElementById('trailerPlayer').innerHTML = `
+
+                    currentYouTubePlayer = trailer.key;
+                } else {
+                    if (trailerTitleEl && title) {
+                        trailerTitleEl.textContent = `${title} — Trailer`;
+                    }
+                    document.getElementById('trailerPlayer').innerHTML = `
                     <div class="no-trailer">
                         <i class="fas fa-film fa-3x"></i>
                         <p>No official trailer available for this title.</p>
                     </div>
                 `;
-            }
-            
-        } catch (error) {
-            if (requestId !== latestTrailerRequestId) return;
-            console.error('Error loading trailer:', error);
-            document.getElementById('trailerPlayer').innerHTML = `
+                }
+
+            } catch (error) {
+                if (requestId !== latestTrailerRequestId) return;
+                console.error('Error loading trailer:', error);
+                document.getElementById('trailerPlayer').innerHTML = `
                 <div class="error-trailer">
                     <i class="fas fa-exclamation-triangle fa-3x"></i>
                     <p>Failed to load trailer. Please try again later.</p>
                 </div>
             `;
+            }
         }
-    }
-    
-    // Play media in player modal
-    async function playMedia(id, type, title) {
-        try {
-            // Stop any current media players
-            stopAllMediaPlayers();
-            
-            // Show loading in player
-            document.getElementById('playerContainer').innerHTML = `
+
+        // Play media in player modal
+        async function playMedia(id, type, title) {
+            try {
+                // Stop any current media players
+                stopAllMediaPlayers();
+
+                // Show loading in player
+                document.getElementById('playerContainer').innerHTML = `
                 <div class="loading-player">
                     <div class="spinner"></div>
                     <p>Loading player...</p>
                 </div>
             `;
-            
-            // Update player title
-            document.getElementById('playerTitle').textContent = `Playing: ${title}`;
-            document.getElementById('playingTitle').textContent = title;
-            
-            // Close any open modals without popping browser history before opening player
-            closeAllModals({ preserveHistory: true });
-            
-            // Open player modal
-            openModal(playerModal);
-            
-            // Get media details for player info
-            const endpoint = type === 'movie' ? 'movie' : 'tv';
-            const append = type === 'tv' ? 'credits,aggregate_credits,similar' : 'credits,similar';
-            const response = await fetch(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=${append}`);
-            const data = await response.json();
 
-            // Record in Continue Watching history
-            if (window.NetStreamHistory) {
-                window.NetStreamHistory.recordWatch({
-                    id,
-                    mediaType: type,
-                    title: title || data.title || data.name,
-                    poster_path: data.poster_path,
-                    backdrop_path: data.backdrop_path,
-                    overview: data.overview,
-                    vote_average: data.vote_average,
-                    vote_count: data.vote_count
-                });
-            }
-            
-            // Update player info
-            const ratingInfo = formatRating(data.vote_average, data.vote_count);
-            document.getElementById('playerRating').textContent = ratingInfo.label;
-            document.getElementById('playerYear').textContent = data.release_date ? data.release_date.substring(0, 4) : data.first_air_date ? data.first_air_date.substring(0, 4) : 'N/A';
-            document.getElementById('playerDuration').textContent = type === 'movie'
-                ? (data.runtime ? `${data.runtime} min` : 'N/A')
-                : (data.episode_run_time && data.episode_run_time.length > 0 ? `${data.episode_run_time[0]} min/ep` : 'N/A');
-            document.getElementById('playerDescription').textContent = data.overview || 'No description available.';
-            
-            // Update cast
-            const castList = getCastList(data, 10);
-            const castHTML = `
+                // Update player title
+                document.getElementById('playerTitle').textContent = `Playing: ${title}`;
+                document.getElementById('playingTitle').textContent = title;
+
+                // Close any open modals without popping browser history before opening player
+                closeAllModals({ preserveHistory: true });
+
+                // Open player modal
+                openModal(playerModal);
+
+                // Get media details for player info
+                const endpoint = type === 'movie' ? 'movie' : 'tv';
+                const append = type === 'tv' ? 'credits,aggregate_credits,similar' : 'credits,similar';
+                const data = await NetStreamAPI.fetchCached(`${TMDB_BASE_URL}/${endpoint}/${id}?api_key=${TMDB_API_KEY}&append_to_response=${append}`);
+
+                // Record in Continue Watching history
+                if (window.NetStreamHistory) {
+                    window.NetStreamHistory.recordWatch({
+                        id,
+                        mediaType: type,
+                        title: title || data.title || data.name,
+                        poster_path: data.poster_path,
+                        backdrop_path: data.backdrop_path,
+                        overview: data.overview,
+                        vote_average: data.vote_average,
+                        vote_count: data.vote_count
+                    });
+                }
+
+                // Update player info
+                const ratingInfo = formatRating(data.vote_average, data.vote_count);
+                document.getElementById('playerRating').textContent = ratingInfo.label;
+                document.getElementById('playerYear').textContent = data.release_date ? data.release_date.substring(0, 4) : data.first_air_date ? data.first_air_date.substring(0, 4) : 'N/A';
+                document.getElementById('playerDuration').textContent = type === 'movie'
+                    ? (data.runtime ? `${data.runtime} min` : 'N/A')
+                    : (data.episode_run_time && data.episode_run_time.length > 0 ? `${data.episode_run_time[0]} min/ep` : 'N/A');
+                document.getElementById('playerDescription').textContent = data.overview || 'No description available.';
+
+                // Update cast
+                const castList = getCastList(data, 10);
+                const castHTML = `
                 <h5>Cast</h5>
                 ${castList.length > 0 ? `
                     <div class="cast-scroll">
                         ${castList.map(actor => `
                             <div class="cast-item">
                                 <div class="cast-img-sm">
-                                    ${actor.profile_path ? 
-                                        `<img src="${TMDB_IMAGE_BASE}/w92${actor.profile_path}" alt="${actor.name}" loading="lazy">` : 
-                                        `<div class="no-img-sm"><i class="fas fa-user"></i></div>`
-                                    }
+                                    ${actor.profile_path ?
+                        `<img src="${TMDB_IMAGE_BASE}/w92${actor.profile_path}" alt="${actor.name}" loading="lazy">` :
+                        `<div class="no-img-sm"><i class="fas fa-user"></i></div>`
+                    }
                                 </div>
                                 <div class="cast-info-sm">
                                     <h6>${actor.name}</h6>
@@ -1443,17 +1485,17 @@
                     </div>
                 ` : '<p class="no-cast">No cast information available.</p>'}
             `;
-            document.getElementById('playerCast').innerHTML = castHTML;
-            
-            // Load similar titles
-            const similarResults = (data.similar && Array.isArray(data.similar.results)) ? data.similar.results.slice(0, 8) : [];
-            const similarHTML = `
+                document.getElementById('playerCast').innerHTML = castHTML;
+
+                // Load similar titles
+                const similarResults = (data.similar && Array.isArray(data.similar.results)) ? data.similar.results.slice(0, 8) : [];
+                const similarHTML = `
                 <h5>You May Also Like</h5>
                 ${similarResults.length > 0 ? `
                     <div class="similar-scroll">
                         ${similarResults.map(movie => {
-                            const simRating = formatRating(movie.vote_average, movie.vote_count);
-                            return `
+                    const simRating = formatRating(movie.vote_average, movie.vote_count);
+                    return `
                                 <div class="similar-item" data-id="${movie.id}" data-type="${type}">
                                     <img src="${movie.poster_path ? `${TMDB_IMAGE_BASE}/w154${movie.poster_path}` : POSTER_FALLBACK}" alt="${movie.title || movie.name}" loading="lazy">
                                     <div class="similar-info">
@@ -1462,276 +1504,276 @@
                                     </div>
                                 </div>
                             `;
-                        }).join('')}
+                }).join('')}
                     </div>
                 ` : '<p class="no-cast">No similar titles available.</p>'}
             `;
-            document.getElementById('similarMovies').innerHTML = similarHTML;
-            
-            // Add event listeners to similar items
-            document.querySelectorAll('.similar-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const similarId = this.dataset.id;
-                    const similarType = this.dataset.type;
-                    const similarTitle = this.querySelector('h6').textContent;
-                    playMedia(similarId, similarType, similarTitle);
+                document.getElementById('similarMovies').innerHTML = similarHTML;
+
+                // Add event listeners to similar items
+                document.querySelectorAll('.similar-item').forEach(item => {
+                    item.addEventListener('click', function () {
+                        const similarId = this.dataset.id;
+                        const similarType = this.dataset.type;
+                        const similarTitle = this.querySelector('h6').textContent;
+                        playMedia(similarId, similarType, similarTitle);
+                    });
                 });
-            });
-            
-            // Load player based on type
-            const playerIframe = document.createElement('iframe');
-            playerIframe.id = 'vidstuckPlayer';
-            playerIframe.width = '100%';
-            playerIframe.height = '100%';
-            playerIframe.frameBorder = '0';
-            playerIframe.allowFullscreen = true;
-            playerIframe.setAttribute('allowfullscreen', 'true');
-            playerIframe.setAttribute('webkitallowfullscreen', 'true');
-            playerIframe.setAttribute('mozallowfullscreen', 'true');
-            playerIframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture; screen-wake-lock';
-            playerIframe.src = buildVidstuckEmbedUrl(id, type);
-            
-            document.getElementById('playerContainer').innerHTML = '';
-            document.getElementById('playerContainer').appendChild(playerIframe);
-            currentVidstuckPlayer = playerIframe;
-            
-        } catch (error) {
-            console.error('Error playing media:', error);
-            document.getElementById('playerContainer').innerHTML = `
+
+                // Load player based on type
+                const playerIframe = document.createElement('iframe');
+                playerIframe.id = 'vidstuckPlayer';
+                playerIframe.width = '100%';
+                playerIframe.height = '100%';
+                playerIframe.frameBorder = '0';
+                playerIframe.allowFullscreen = true;
+                playerIframe.setAttribute('allowfullscreen', 'true');
+                playerIframe.setAttribute('webkitallowfullscreen', 'true');
+                playerIframe.setAttribute('mozallowfullscreen', 'true');
+                playerIframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture; screen-wake-lock';
+                playerIframe.src = buildVidstuckEmbedUrl(id, type);
+
+                document.getElementById('playerContainer').innerHTML = '';
+                document.getElementById('playerContainer').appendChild(playerIframe);
+                currentVidstuckPlayer = playerIframe;
+
+            } catch (error) {
+                console.error('Error playing media:', error);
+                document.getElementById('playerContainer').innerHTML = `
                 <div class="error-player">
                     <i class="fas fa-exclamation-triangle fa-3x"></i>
                     <p>Failed to load player. Please try again later.</p>
                     <button class="btn-retry" onclick="playMedia(${id}, '${type}', '${title}')">Retry</button>
                 </div>
             `;
-        }
-    }
-    
-    // Build Vidstuck embed URL with customization and resume progress
-    function buildVidstuckEmbedUrl(id, type) {
-        const params = new URLSearchParams({
-            color: 'e50914',
-            branding: 'NetStream',
-            overlay: 'true'
-        });
-        
-        let season = 1;
-        let episode = 1;
-        const progressKey = type === 'tv' ? `netstream_progress_tv_${id}` : `netstream_progress_movie_${id}`;
-        const savedRaw = localStorage.getItem(progressKey);
-        
-        if (savedRaw) {
-            try {
-                const saved = JSON.parse(savedRaw);
-                if (type === 'tv') {
-                    if (saved.season) season = saved.season;
-                    if (saved.episode) episode = saved.episode;
-                }
-                const pct = saved.duration ? (saved.currentTime / saved.duration) * 100 : (saved.progress || 0);
-                if (saved.currentTime > 0 && pct < 95) {
-                    params.set('progress', Math.floor(saved.currentTime));
-                }
-            } catch (e) {
-                // Ignore invalid stored progress
             }
         }
-        
-        if (type === 'movie') {
-            return `${VIDSTUCK_BASE_URL}/embed/movie/${id}?${params.toString()}`;
-        }
-        
-        params.set('nextEpisode', 'true');
-        params.set('episodeSelector', 'true');
-        params.set('autoplayNextEpisode', 'true');
-        return `${VIDSTUCK_BASE_URL}/embed/tv/${id}/${season}/${episode}?${params.toString()}`;
-    }
-    
-    // Function to stop all media players
-    function stopAllMediaPlayers() {
-        // Stop YouTube player if it exists
-        const youtubePlayer = document.getElementById('youtubeTrailer');
-        if (youtubePlayer) {
-            // Remove the iframe to stop playback
-            youtubePlayer.remove();
-        }
-        
-        // Stop Vidstuck player if it exists
-        const vidstuckPlayer = document.getElementById('vidstuckPlayer');
-        if (vidstuckPlayer) {
-            // Remove the iframe to stop playback
-            vidstuckPlayer.remove();
-        }
-        
-        // Reset player tracking
-        currentYouTubePlayer = null;
-        currentVidstuckPlayer = null;
-    }
-    
-    function getTopOpenModal() {
-        for (let i = modalStack.length - 1; i >= 0; i--) {
-            if (modalStack[i] && modalStack[i].classList.contains('active')) {
-                return modalStack[i];
+
+        // Build Vidstuck embed URL with customization and resume progress
+        function buildVidstuckEmbedUrl(id, type) {
+            const params = new URLSearchParams({
+                color: 'e50914',
+                branding: 'NetStream',
+                overlay: 'true'
+            });
+
+            let season = 1;
+            let episode = 1;
+            const progressKey = type === 'tv' ? `netstream_progress_tv_${id}` : `netstream_progress_movie_${id}`;
+            const savedRaw = localStorage.getItem(progressKey);
+
+            if (savedRaw) {
+                try {
+                    const saved = JSON.parse(savedRaw);
+                    if (type === 'tv') {
+                        if (saved.season) season = saved.season;
+                        if (saved.episode) episode = saved.episode;
+                    }
+                    const pct = saved.duration ? (saved.currentTime / saved.duration) * 100 : (saved.progress || 0);
+                    if (saved.currentTime > 0 && pct < 95) {
+                        params.set('progress', Math.floor(saved.currentTime));
+                    }
+                } catch (e) {
+                    // Ignore invalid stored progress
+                }
             }
+
+            if (type === 'movie') {
+                return `${VIDSTUCK_BASE_URL}/embed/movie/${id}?${params.toString()}`;
+            }
+
+            params.set('nextEpisode', 'true');
+            params.set('episodeSelector', 'true');
+            params.set('autoplayNextEpisode', 'true');
+            return `${VIDSTUCK_BASE_URL}/embed/tv/${id}/${season}/${episode}?${params.toString()}`;
         }
-        if (trailerModal.classList.contains('active')) return trailerModal;
-        if (playerModal.classList.contains('active')) return playerModal;
-        if (movieModal.classList.contains('active')) return movieModal;
-        return null;
-    }
-    
-    function syncBodyScroll() {
-        const hasActive = Boolean(document.querySelector('.trailer-modal.active, .movie-modal.active, .player-modal.active'));
-        document.body.style.overflow = hasActive ? 'hidden' : '';
-    }
-    
-    // Open modal with proper animation and back-button history tracking
-    function openModal(modal) {
-        if (!modal) return;
-        const existingIdx = modalStack.indexOf(modal);
-        if (existingIdx !== -1) modalStack.splice(existingIdx, 1);
-        modalStack.push(modal);
-        modal.classList.add('active');
-        syncBodyScroll();
-        if (!history.state || !history.state.netstreamModalOpen) {
-            history.pushState({ netstreamModalOpen: true }, '');
-        }
-    }
-    
-    // Close modal with proper animation and media cleanup
-    function closeModal(modal, options = {}) {
-        if (!modal) return;
-        const idx = modalStack.indexOf(modal);
-        if (idx !== -1) modalStack.splice(idx, 1);
-        
-        if (modal === trailerModal) {
-            latestTrailerRequestId++;
-            const yt = document.getElementById('youtubeTrailer');
-            if (yt) yt.remove();
+
+        // Function to stop all media players
+        function stopAllMediaPlayers() {
+            // Stop YouTube player if it exists
+            const youtubePlayer = document.getElementById('youtubeTrailer');
+            if (youtubePlayer) {
+                // Remove the iframe to stop playback
+                youtubePlayer.remove();
+            }
+
+            // Stop Vidstuck player if it exists
+            const vidstuckPlayer = document.getElementById('vidstuckPlayer');
+            if (vidstuckPlayer) {
+                // Remove the iframe to stop playback
+                vidstuckPlayer.remove();
+            }
+
+            // Reset player tracking
             currentYouTubePlayer = null;
-        } else if (modal === playerModal) {
-            exitPlayerFullscreen();
-            const vp = document.getElementById('vidstuckPlayer');
-            if (vp) vp.remove();
             currentVidstuckPlayer = null;
         }
-        
-        modal.classList.remove('active');
-        syncBodyScroll();
-        
-        if (!options.fromPopState && !getTopOpenModal() && history.state && history.state.netstreamModalOpen) {
-            isHandlingPopState = true;
-            history.back();
-        }
-        
-        // Clear modal content after closing
-        setTimeout(() => {
-            if (!modal.classList.contains('active')) {
-                if (modal === trailerModal) {
-                    document.getElementById('trailerPlayer').innerHTML = '<p>Loading trailer...</p>';
-                } else if (modal === playerModal) {
-                    document.getElementById('playerContainer').innerHTML = '<div class="loading-player"><div class="spinner"></div><p>Loading player...</p></div>';
+
+        function getTopOpenModal() {
+            for (let i = modalStack.length - 1; i >= 0; i--) {
+                if (modalStack[i] && modalStack[i].classList.contains('active')) {
+                    return modalStack[i];
                 }
             }
-        }, 300);
-    }
-    
-    // Close all modals
-    function closeAllModals(options = {}) {
-        modalStack.length = 0;
-        movieModal.classList.remove('active');
-        playerModal.classList.remove('active');
-        trailerModal.classList.remove('active');
-        stopAllMediaPlayers();
-        syncBodyScroll();
-        if (!options.preserveHistory && history.state && history.state.netstreamModalOpen) {
-            isHandlingPopState = true;
-            history.back();
+            if (trailerModal.classList.contains('active')) return trailerModal;
+            if (playerModal.classList.contains('active')) return playerModal;
+            if (movieModal.classList.contains('active')) return movieModal;
+            return null;
         }
-    }
-    
-    // Listen for Vidstuck watch progress postMessage events
-    window.addEventListener('message', function(event) {
-        if (event.origin !== 'https://www.vidstuck.cc' && event.origin !== 'https://vidstuck.cc') return;
-        if (typeof event.data !== 'string') return;
-        
-        try {
-            const payload = JSON.parse(event.data);
-            if (!payload || !payload.id || typeof payload.duration !== 'number' || payload.duration <= 0) return;
-            
-            const currentTime = typeof payload.timestamp === 'number' ? payload.timestamp : 0;
-            const mediaType = payload.type === 'tv' ? 'tv' : 'movie';
-            const progress = typeof payload.progress === 'number' ? payload.progress : (currentTime / payload.duration) * 100;
-            
-            saveWatchProgress({
-                id: payload.id,
-                mediaType,
-                currentTime,
-                duration: payload.duration,
-                progress,
-                season: payload.season,
-                episode: payload.episode
-            });
-        } catch (e) {
-            // Ignore non-JSON or unrelated messages
-        }
-    });
-    
-    // Save watch progress to localStorage
-    function saveWatchProgress(data) {
-        try {
-            const progressKey = `netstream_progress_${data.mediaType}_${data.id}`;
-            const progressData = {
-                id: data.id,
-                mediaType: data.mediaType,
-                currentTime: data.currentTime,
-                duration: data.duration,
-                progress: data.progress,
-                season: data.season,
-                episode: data.episode,
-                timestamp: Date.now()
-            };
-            
-            // Store in localStorage
-            localStorage.setItem(progressKey, JSON.stringify(progressData));
 
-            // Sync with Continue Watching history
-            if (window.NetStreamHistory) {
-                window.NetStreamHistory.updateProgress(data.id, data.mediaType, progressData);
-            }
-            
-            // Update UI with resume option if applicable
-            updateResumeButtons(data.id, data.mediaType, data.currentTime, data.duration);
-            
-        } catch (error) {
-            console.error('Error saving watch progress:', error);
+        function syncBodyScroll() {
+            const hasActive = Boolean(document.querySelector('.trailer-modal.active, .movie-modal.active, .player-modal.active'));
+            document.body.style.overflow = hasActive ? 'hidden' : '';
         }
-    }
-    
-    // Update resume buttons on movie cards
-    function updateResumeButtons(id, mediaType, currentTime, duration) {
-        const progressPercent = (currentTime / duration) * 100;
-        
-        // Find all cards with this media
-        const cards = document.querySelectorAll(`.movie-card[data-id="${id}"][data-type="${mediaType}"]`);
-        
-        cards.forEach(card => {
-            // Add or update progress bar
-            let progressBar = card.querySelector('.progress-bar');
-            if (!progressBar) {
-                progressBar = document.createElement('div');
-                progressBar.className = 'progress-bar';
-                card.querySelector('.movie-poster').appendChild(progressBar);
+
+        // Open modal with proper animation and back-button history tracking
+        function openModal(modal) {
+            if (!modal) return;
+            const existingIdx = modalStack.indexOf(modal);
+            if (existingIdx !== -1) modalStack.splice(existingIdx, 1);
+            modalStack.push(modal);
+            modal.classList.add('active');
+            syncBodyScroll();
+            if (!history.state || !history.state.netstreamModalOpen) {
+                history.pushState({ netstreamModalOpen: true }, '');
             }
-            
-            progressBar.style.width = `${progressPercent}%`;
-            
-            // Update play button to resume
-            const playBtn = card.querySelector('.btn-play');
-            if (playBtn && progressPercent > 5 && progressPercent < 95) {
-                playBtn.innerHTML = '<i class="fas fa-redo"></i>';
-                playBtn.title = 'Resume';
+        }
+
+        // Close modal with proper animation and media cleanup
+        function closeModal(modal, options = {}) {
+            if (!modal) return;
+            const idx = modalStack.indexOf(modal);
+            if (idx !== -1) modalStack.splice(idx, 1);
+
+            if (modal === trailerModal) {
+                latestTrailerRequestId++;
+                const yt = document.getElementById('youtubeTrailer');
+                if (yt) yt.remove();
+                currentYouTubePlayer = null;
+            } else if (modal === playerModal) {
+                exitPlayerFullscreen();
+                const vp = document.getElementById('vidstuckPlayer');
+                if (vp) vp.remove();
+                currentVidstuckPlayer = null;
+            }
+
+            modal.classList.remove('active');
+            syncBodyScroll();
+
+            if (!options.fromPopState && !getTopOpenModal() && history.state && history.state.netstreamModalOpen) {
+                isHandlingPopState = true;
+                history.back();
+            }
+
+            // Clear modal content after closing
+            setTimeout(() => {
+                if (!modal.classList.contains('active')) {
+                    if (modal === trailerModal) {
+                        document.getElementById('trailerPlayer').innerHTML = '<p>Loading trailer...</p>';
+                    } else if (modal === playerModal) {
+                        document.getElementById('playerContainer').innerHTML = '<div class="loading-player"><div class="spinner"></div><p>Loading player...</p></div>';
+                    }
+                }
+            }, 300);
+        }
+
+        // Close all modals
+        function closeAllModals(options = {}) {
+            modalStack.length = 0;
+            movieModal.classList.remove('active');
+            playerModal.classList.remove('active');
+            trailerModal.classList.remove('active');
+            stopAllMediaPlayers();
+            syncBodyScroll();
+            if (!options.preserveHistory && history.state && history.state.netstreamModalOpen) {
+                isHandlingPopState = true;
+                history.back();
+            }
+        }
+
+        // Listen for Vidstuck watch progress postMessage events
+        window.addEventListener('message', function (event) {
+            if (event.origin !== 'https://www.vidstuck.cc' && event.origin !== 'https://vidstuck.cc') return;
+            if (typeof event.data !== 'string') return;
+
+            try {
+                const payload = JSON.parse(event.data);
+                if (!payload || !payload.id || typeof payload.duration !== 'number' || payload.duration <= 0) return;
+
+                const currentTime = typeof payload.timestamp === 'number' ? payload.timestamp : 0;
+                const mediaType = payload.type === 'tv' ? 'tv' : 'movie';
+                const progress = typeof payload.progress === 'number' ? payload.progress : (currentTime / payload.duration) * 100;
+
+                saveWatchProgress({
+                    id: payload.id,
+                    mediaType,
+                    currentTime,
+                    duration: payload.duration,
+                    progress,
+                    season: payload.season,
+                    episode: payload.episode
+                });
+            } catch (e) {
+                // Ignore non-JSON or unrelated messages
             }
         });
-    }
-</script>
-<script src="js/player-fullscreen.js"></script>
+
+        // Save watch progress to localStorage
+        function saveWatchProgress(data) {
+            try {
+                const progressKey = `netstream_progress_${data.mediaType}_${data.id}`;
+                const progressData = {
+                    id: data.id,
+                    mediaType: data.mediaType,
+                    currentTime: data.currentTime,
+                    duration: data.duration,
+                    progress: data.progress,
+                    season: data.season,
+                    episode: data.episode,
+                    timestamp: Date.now()
+                };
+
+                // Store in localStorage
+                localStorage.setItem(progressKey, JSON.stringify(progressData));
+
+                // Sync with Continue Watching history
+                if (window.NetStreamHistory) {
+                    window.NetStreamHistory.updateProgress(data.id, data.mediaType, progressData);
+                }
+
+                // Update UI with resume option if applicable
+                updateResumeButtons(data.id, data.mediaType, data.currentTime, data.duration);
+
+            } catch (error) {
+                console.error('Error saving watch progress:', error);
+            }
+        }
+
+        // Update resume buttons on movie cards
+        function updateResumeButtons(id, mediaType, currentTime, duration) {
+            const progressPercent = (currentTime / duration) * 100;
+
+            // Find all cards with this media
+            const cards = document.querySelectorAll(`.movie-card[data-id="${id}"][data-type="${mediaType}"]`);
+
+            cards.forEach(card => {
+                // Add or update progress bar
+                let progressBar = card.querySelector('.progress-bar');
+                if (!progressBar) {
+                    progressBar = document.createElement('div');
+                    progressBar.className = 'progress-bar';
+                    card.querySelector('.movie-poster').appendChild(progressBar);
+                }
+
+                progressBar.style.width = `${progressPercent}%`;
+
+                // Update play button to resume
+                const playBtn = card.querySelector('.btn-play');
+                if (playBtn && progressPercent > 5 && progressPercent < 95) {
+                    playBtn.innerHTML = '<i class="fas fa-redo"></i>';
+                    playBtn.title = 'Resume';
+                }
+            });
+        }
+    </script>
+    <script src="js/player-fullscreen.js"></script>
