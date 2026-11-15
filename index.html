@@ -25,6 +25,7 @@
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <script src="js/api-cache.js"></script>
     <script src="js/watch-history.js"></script>
+    <script src="js/adblocker.js"></script>
 </head>
 
 <body>
@@ -305,6 +306,10 @@
                 <button type="button" class="modal-back-btn" data-close-modal="playerModal" aria-label="Back"><i
                         class="fas fa-arrow-left"></i> <span>Back</span></button>
                 <h3 id="playerTitle">Playing: Movie Title</h3>
+                <div class="adblock-status-pill" id="adblockStatusPill" title="NetStream AdBlocker Active: Popup ads and redirects are blocked">
+                    <i class="fas fa-shield-halved"></i>
+                    <span>AdBlock ON</span>
+                </div>
                 <button type="button" class="modal-fullscreen-btn" id="playerFullscreenBtn"
                     aria-label="Toggle Fullscreen"><i class="fas fa-expand"></i> <span>Fullscreen</span></button>
                 <button type="button" class="close-modal" id="closePlayerBtn" aria-label="Close">&times;</button>
@@ -1587,6 +1592,12 @@
                 playerIframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture; screen-wake-lock';
                 playerIframe.src = buildVidstuckEmbedUrl(id, type);
 
+                // Protect player from popups, redirects and ad-click hijacking
+                if (window.NetStreamAdBlocker) {
+                    window.NetStreamAdBlocker.protectPlayerIframe(playerIframe);
+                    window.NetStreamAdBlocker.activate();
+                }
+
                 document.getElementById('playerContainer').innerHTML = '';
                 document.getElementById('playerContainer').appendChild(playerIframe);
                 currentVidstuckPlayer = playerIframe;
@@ -1657,6 +1668,9 @@
                 // Remove the iframe to stop playback
                 vidstuckPlayer.remove();
             }
+            if (window.NetStreamAdBlocker) {
+                window.NetStreamAdBlocker.deactivate();
+            }
 
             // Reset player tracking
             currentYouTubePlayer = null;
@@ -1709,6 +1723,9 @@
                 const vp = document.getElementById('vidstuckPlayer');
                 if (vp) vp.remove();
                 currentVidstuckPlayer = null;
+                if (window.NetStreamAdBlocker) {
+                    window.NetStreamAdBlocker.deactivate();
+                }
             }
 
             modal.classList.remove('active');
