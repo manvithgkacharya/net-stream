@@ -3212,4 +3212,59 @@ button, input, select {
     }
 }
 
+/* Player Server Switcher */
+.player-server-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0 0.75rem 0;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.player-server-controls .server-label {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.player-server-controls .server-label i {
+    color: #e50914;
+}
+
+.btn-server {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #cbd5e1;
+    padding: 0.35rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.btn-server:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.28);
+    color: #fff;
+}
+
+.btn-server.active {
+    background: linear-gradient(135deg, #e50914, #b20710);
+    border-color: #e50914;
+    color: #fff;
+    box-shadow: 0 0 12px rgba(229, 9, 20, 0.45);
+    font-weight: 600;
+}
+
 

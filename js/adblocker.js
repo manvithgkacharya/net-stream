@@ -1,6 +1,6 @@
 /**
  * NetStream - Advanced Video Player AdBlocker & Anti-Redirect Shield
- * - Enforces strict HTML5 iframe sandboxing (blocks top-navigation & popup ads)
+ * - Active parent-level shielding (blocks top-navigation, popups, and focus theft)
  * - Intercepts window.open calls and rogue programmatic redirects
  * - Defends against focus-stealing popunders
  * - Blocks injected click-jacking anchors
@@ -36,25 +36,19 @@
         return nativeWindowOpen.apply(this, arguments);
     };
 
-    // Protect player iframe: apply strict sandboxing & security policies
+    // Protect player iframe: apply security policies & permissions
     function protectPlayerIframe(iframe) {
         if (!iframe) return;
 
-        // Strict HTML5 Sandbox:
-        // ALLOW:
-        // - allow-scripts: for player JS (HLS, Video.js, video decoders)
-        // - allow-same-origin: for media CORS chunks, cookies & storage
-        // - allow-forms: for search / episode selectors inside the player
-        // - allow-presentation: for casting / presentation API
-        //
-        // STRICTLY OMITTED (BLOCKED):
-        // - NO allow-top-navigation (Blocks iframe from redirecting the main website!)
-        // - NO allow-top-navigation-by-user-activation (Blocks redirects even when user clicks on player!)
-        // - NO allow-popups (Blocks window.open and new tab ad redirects!)
-        // - NO allow-popups-to-escape-sandbox
-        // - NO allow-modals (Blocks alert/prompt scam dialogs!)
-        // - NO allow-downloads (Blocks drive-by APK/malware downloads!)
-        iframe.setAttribute('sandbox', 'allow-forms allow-scripts allow-same-origin allow-presentation');
+        // Note: Do NOT set iframe 'sandbox' attribute as Vidstuck, vidsrc, and other modern
+        // streaming embed providers detect HTML5 iframe sandboxing and intentionally block
+        // video playback with a "Sandbox Detected" error screen.
+        // Protection against popups and rogue redirects is instead enforced at the parent
+        // window level via top-level beforeunload guard, window.open override, click-jacking
+        // interception, and anti-popunder focus lock.
+        if (typeof iframe.removeAttribute === 'function') {
+            iframe.removeAttribute('sandbox');
+        }
 
         // Permissions Policy
         iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture; screen-wake-lock');
@@ -62,24 +56,8 @@
         iframe.setAttribute('webkitallowfullscreen', 'true');
         iframe.setAttribute('mozallowfullscreen', 'true');
 
-        // Referrer & credential protection
+        // Referrer policy
         iframe.setAttribute('referrerpolicy', 'origin');
-
-        // Observe if any rogue script attempts to tamper with sandbox attribute
-        if (window.MutationObserver) {
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((m) => {
-                    if (m.type === 'attributes' && m.attributeName === 'sandbox') {
-                        const currentVal = iframe.getAttribute('sandbox') || '';
-                        if (currentVal.includes('allow-top-navigation') || currentVal.includes('allow-popups')) {
-                            console.warn('[NetStream AdBlocker] Rogue attempt to disable iframe sandbox detected. Restoring shield!');
-                            iframe.setAttribute('sandbox', 'allow-forms allow-scripts allow-same-origin allow-presentation');
-                        }
-                    }
-                });
-            });
-            observer.observe(iframe, { attributes: true });
-        }
     }
 
     // Activate shield when player modal opens
@@ -191,3 +169,4 @@
         isActive: () => isPlayerActive
     };
 })();
+

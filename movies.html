@@ -738,6 +738,11 @@
                     <!-- Player will be dynamically loaded here -->
                 </div>
                 <div class="player-info">
+                    <div class="player-server-controls" id="playerServerControls">
+                        <span class="server-label"><i class="fas fa-server"></i> Server:</span>
+                        <button type="button" class="btn-server active" data-server="vidstuck">Server 1 (Vidstuck HD)</button>
+                        <button type="button" class="btn-server" data-server="2embed">Server 2 (2Embed)</button>
+                    </div>
                     <div class="player-details">
                         <h4 id="playingTitle">Movie Title</h4>
                         <div class="player-meta">
@@ -2053,8 +2058,14 @@
             playerIframe.setAttribute('webkitallowfullscreen', 'true');
             playerIframe.setAttribute('mozallowfullscreen', 'true');
             playerIframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture; screen-wake-lock';
-            playerIframe.src = buildVidstuckEmbedUrl(id, type);
+            currentPlayingMedia = { id, type, title };
+            playerIframe.src = buildMediaEmbedUrl(id, type, activePlayerServer);
             
+            // Sync server selector button state
+            document.querySelectorAll('#playerServerControls .btn-server').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.server === activePlayerServer);
+            });
+
             // Protect player with NetStream AdBlocker Shield
             if (window.NetStreamAdBlocker) {
                 window.NetStreamAdBlocker.protectPlayerIframe(playerIframe);
@@ -2077,6 +2088,56 @@
         }
     }
     
+    let activePlayerServer = 'vidstuck';
+    let currentPlayingMedia = null;
+
+    // Build embed URL based on active server
+    function buildMediaEmbedUrl(id, type, server = activePlayerServer) {
+        if (server === '2embed') {
+            if (type === 'tv') {
+                let season = 1;
+                let episode = 1;
+                const savedRaw = localStorage.getItem(`netstream_progress_tv_${id}`);
+                if (savedRaw) {
+                    try {
+                        const saved = JSON.parse(savedRaw);
+                        if (saved.season) season = saved.season;
+                        if (saved.episode) episode = saved.episode;
+                    } catch (_) {}
+                }
+                return `https://www.2embed.cc/embedtv/${id}&s=${season}&e=${episode}`;
+            }
+            return `https://www.2embed.cc/embed/${id}`;
+        }
+        return buildVidstuckEmbedUrl(id, type);
+    }
+
+    // Switch streaming server dynamically
+    function switchPlayerServer(server) {
+        activePlayerServer = server;
+        document.querySelectorAll('#playerServerControls .btn-server').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.server === server);
+        });
+        if (currentPlayingMedia) {
+            const playerIframe = document.getElementById('vidstuckPlayer');
+            if (playerIframe) {
+                playerIframe.src = buildMediaEmbedUrl(currentPlayingMedia.id, currentPlayingMedia.type, server);
+                if (window.NetStreamAdBlocker) {
+                    window.NetStreamAdBlocker.protectPlayerIframe(playerIframe);
+                }
+            }
+        }
+    }
+
+    // Attach server switcher event listeners
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('#playerServerControls .btn-server').forEach(btn => {
+            btn.addEventListener('click', function () {
+                switchPlayerServer(this.dataset.server);
+            });
+        });
+    });
+
     // Build Vidstuck embed URL with customization and resume progress
     function buildVidstuckEmbedUrl(id, type) {
         const params = new URLSearchParams({
